@@ -99,7 +99,7 @@ const totalCourse = computed(() => courseData.value.total)
           <div>
             <div class="text-base font-weight-medium mb-1">
               <RouterLink
-                :to="{ name: 'apps-academy-course-details' }"
+                :to="{ name: 'ui-apps-academy-course-details' }"
                 class="text-link"
               >
                 {{ item.courseTitle }}

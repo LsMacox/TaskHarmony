@@ -54,11 +54,10 @@ const login = async () => {
       },
     })
 
-    const { accessToken, userData, userAbilityRules } = res
+    const { accessToken, userAbilityRules } = res
 
     useCookie('userAbilityRules').value = userAbilityRules
     ability.update(userAbilityRules)
-    useCookie('userData').value = userData
     useCookie('accessToken').value = accessToken
     await nextTick(() => {
       router.replace(route.query.to ? String(route.query.to) : '/')
@@ -169,22 +168,23 @@ const onSubmit = () => {
                   @click:append-inner="isPasswordVisible = !isPasswordVisible"
                 />
 
-                <div class="d-flex align-center flex-wrap justify-space-between mt-1 mb-4">
-                  <VCheckbox
-                    v-model="rememberMe"
-                    label="Remember me"
-                  />
-                  <RouterLink
-                    class="text-primary ms-2 mb-1"
-                    :to="{ name: 'forgot-password' }"
-                  >
-                    Forgot Password?
-                  </RouterLink>
-                </div>
+<!--                <div class="d-flex align-center flex-wrap justify-space-between mt-1 mb-4">-->
+<!--                  <VCheckbox-->
+<!--                    v-model="rememberMe"-->
+<!--                    label="Remember me"-->
+<!--                  />-->
+<!--                  <RouterLink-->
+<!--                    class="text-primary ms-2 mb-1"-->
+<!--                    :to="{ name: 'forgot-password' }"-->
+<!--                  >-->
+<!--                    Forgot Password?-->
+<!--                  </RouterLink>-->
+<!--                </div>-->
 
                 <VBtn
                   block
                   type="submit"
+                  class="mt-5"
                 >
                   Login
                 </VBtn>
@@ -203,22 +203,22 @@ const onSubmit = () => {
                   Create an account
                 </RouterLink>
               </VCol>
-              <VCol
-                cols="12"
-                class="d-flex align-center"
-              >
-                <VDivider />
-                <span class="mx-4">or</span>
-                <VDivider />
-              </VCol>
+<!--              <VCol-->
+<!--                cols="12"-->
+<!--                class="d-flex align-center"-->
+<!--              >-->
+<!--                <VDivider />-->
+<!--                <span class="mx-4">or</span>-->
+<!--                <VDivider />-->
+<!--              </VCol>-->
 
-              <!-- auth providers -->
-              <VCol
-                cols="12"
-                class="text-center"
-              >
-                <AuthProvider />
-              </VCol>
+<!--              &lt;!&ndash; auth providers &ndash;&gt;-->
+<!--              <VCol-->
+<!--                cols="12"-->
+<!--                class="text-center"-->
+<!--              >-->
+<!--                <AuthProvider />-->
+<!--              </VCol>-->
             </VRow>
           </VForm>
         </VCardText>

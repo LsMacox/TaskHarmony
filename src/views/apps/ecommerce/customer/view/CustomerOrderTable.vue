@@ -100,7 +100,7 @@ const deleteOrder = async id => {
     >
       <!-- Order ID -->
       <template #item.order="{ item }">
-        <RouterLink :to="{ name: 'apps-ecommerce-order-details-id', params: { id: item.order } }">
+        <RouterLink :to="{ name: 'ui-apps-ecommerce-order-details-id', params: { id: item.order } }">
           #{{ item.order }}
         </RouterLink>
       </template>
@@ -133,7 +133,7 @@ const deleteOrder = async id => {
             <VList>
               <VListItem
                 value="view"
-                :to="{ name: 'apps-ecommerce-order-details-id', params: { id: item.order } }"
+                :to="{ name: 'ui-apps-ecommerce-order-details-id', params: { id: item.order } }"
               >
                 View
               </VListItem>

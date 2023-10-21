@@ -43,7 +43,7 @@ const userProfileList = [
     icon: 'tabler-settings',
     title: 'Settings',
     to: {
-      name: 'pages-account-settings-tab',
+      name: 'ui-pages-account-settings-tab',
       params: { tab: 'account' },
     },
   },
@@ -52,7 +52,7 @@ const userProfileList = [
     icon: 'tabler-credit-card',
     title: 'Billing',
     to: {
-      name: 'pages-account-settings-tab',
+      name: 'ui-pages-account-settings-tab',
       params: { tab: 'billing-plans' },
     },
     badgeProps: {

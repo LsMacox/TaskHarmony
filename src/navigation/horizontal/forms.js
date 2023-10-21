@@ -9,80 +9,80 @@ export default [
         children: [
           {
             title: 'Autocomplete',
-            to: 'forms-autocomplete',
+            to: 'ui-forms-autocomplete',
           },
           {
             title: 'Checkbox',
-            to: 'forms-checkbox',
+            to: 'ui-forms-checkbox',
           },
           {
             title: 'Combobox',
-            to: 'forms-combobox',
+            to: 'ui-forms-combobox',
           },
           {
             title: 'Date Time Picker',
-            to: 'forms-date-time-picker',
+            to: 'ui-forms-date-time-picker',
           },
           {
             title: 'Editors',
-            to: 'forms-editors',
+            to: 'ui-forms-editors',
           },
           {
             title: 'File Input',
-            to: 'forms-file-input',
+            to: 'ui-forms-file-input',
           },
           {
             title: 'Radio',
-            to: 'forms-radio',
+            to: 'ui-forms-radio',
           },
           {
             title: 'Custom Input',
-            to: 'forms-custom-input',
+            to: 'ui-forms-custom-input',
           },
           {
             title: 'Range Slider',
-            to: 'forms-range-slider',
+            to: 'ui-forms-range-slider',
           },
           {
             title: 'Rating',
-            to: 'forms-rating',
+            to: 'ui-forms-rating',
           },
           {
             title: 'Select',
-            to: 'forms-select',
+            to: 'ui-forms-select',
           },
-          { title: 'Slider', to: 'forms-slider' },
+          { title: 'Slider', to: 'ui-forms-slider' },
           {
             title: 'Switch',
-            to: 'forms-switch',
+            to: 'ui-forms-switch',
           },
           {
             title: 'Textarea',
-            to: 'forms-textarea',
+            to: 'ui-forms-textarea',
           },
           {
             title: 'Textfield',
-            to: 'forms-textfield',
+            to: 'ui-forms-textfield',
           },
         ],
       },
       {
         title: 'Form Layouts',
         icon: { icon: 'tabler-circle-check' },
-        to: 'forms-form-layouts',
+        to: 'ui-forms-form-layouts',
       },
       {
         title: 'Form Wizard',
         icon: { icon: 'tabler-align-center' },
         children: [
-          { title: 'Numbered', to: 'forms-form-wizard-numbered' },
-          { title: 'Icons', to: 'forms-form-wizard-icons' },
+          { title: 'Numbered', to: 'ui-forms-form-wizard-numbered' },
+          { title: 'Icons', to: 'ui-forms-form-wizard-icons' },
         ],
       },
       {
         title: 'Form Validation',
         icon: { icon: 'tabler-circle-check' },
-        to: 'forms-form-validation',
+        to: 'ui-forms-form-validation',
       },
     ],
   },

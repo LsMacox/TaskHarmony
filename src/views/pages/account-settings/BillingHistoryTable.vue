@@ -165,7 +165,7 @@ const deleteInvoice = async id => {
       <!-- 👉 Create invoice -->
       <VBtn
         prepend-icon="tabler-plus"
-        :to="{ name: 'apps-invoice-add' }"
+        :to="{ name: 'ui-apps-invoice-add' }"
         class="me-3"
       >
         Create invoice
@@ -227,7 +227,7 @@ const deleteInvoice = async id => {
 
       <!-- id -->
       <template #item.id="{ item }">
-        <RouterLink :to="{ name: 'apps-invoice-preview-id', params: { id: item.id } }">
+        <RouterLink :to="{ name: 'ui-apps-invoice-preview-id', params: { id: item.id } }">
           #{{ item.id }}
         </RouterLink>
       </template>
@@ -278,7 +278,7 @@ const deleteInvoice = async id => {
           <div class="d-flex flex-column">
             <RouterLink
               class="font-weight-medium mb-0 text-link"
-              :to="{ name: 'pages-user-profile-tab', params: { tab: 'profile' } }"
+              :to="{ name: 'ui-pages-user-profile-tab', params: { tab: 'profile' } }"
             >
               {{ item.client.name }}
             </RouterLink>
@@ -318,7 +318,7 @@ const deleteInvoice = async id => {
           <VIcon icon="tabler-trash" />
         </IconBtn>
 
-        <IconBtn :to="{ name: 'apps-invoice-preview-id', params: { id: item.id } }">
+        <IconBtn :to="{ name: 'ui-apps-invoice-preview-id', params: { id: item.id } }">
           <VIcon icon="tabler-eye" />
         </IconBtn>
 

@@ -21,13 +21,56 @@ definePage({
 })
 
 const form = ref({
-  username: '',
+  name: '',
   email: '',
   password: '',
   privacyPolicies: false,
 })
 
+const refVForm = ref()
+
+const errors = ref({
+  name: undefined,
+  email: undefined,
+  password: undefined,
+})
+
 const isPasswordVisible = ref(false)
+
+const register = async () => {
+  try {
+    const res = await $api('/auth/register', {
+      method: 'POST',
+      body: {
+        name: credentials.value.name,
+        email: credentials.value.email,
+        password: credentials.value.password,
+        c_password: credentials.value.password,
+      },
+      onResponseError({ response }) {
+        errors.value = response._data.errors
+      },
+    })
+
+    const { accessToken, userAbilityRules } = res
+
+    useCookie('userAbilityRules').value = userAbilityRules
+    ability.update(userAbilityRules)
+    useCookie('accessToken').value = accessToken
+    await nextTick(() => {
+      router.replace(route.query.to ? String(route.query.to) : '/')
+    })
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+const onSubmit = () => {
+  refVForm.value?.validate().then(({ valid: isValid }) => {
+    if (isValid)
+      register()
+  })
+}
 </script>
 
 <template>
@@ -80,16 +123,17 @@ const isPasswordVisible = ref(false)
         </VCardText>
 
         <VCardText>
-          <VForm @submit.prevent="() => {}">
+          <VForm ref="refVForm" @submit.prevent="onSubmit">
             <VRow>
               <!-- Username -->
               <VCol cols="12">
                 <AppTextField
-                  v-model="form.username"
+                  v-model="form.name"
                   :rules="[requiredValidator]"
                   autofocus
                   label="Username"
                   placeholder="Johndoe"
+                  :error-messages="errors.name"
                 />
               </VCol>
 
@@ -101,6 +145,7 @@ const isPasswordVisible = ref(false)
                   label="Email"
                   type="email"
                   placeholder="johndoe@email.com"
+                  :error-messages="errors.email"
                 />
               </VCol>
 
@@ -114,6 +159,7 @@ const isPasswordVisible = ref(false)
                   :type="isPasswordVisible ? 'text' : 'password'"
                   :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
                   @click:append-inner="isPasswordVisible = !isPasswordVisible"
+                  :error-messages="errors.password"
                 />
 
                 <div class="d-flex align-center mt-2 mb-4">
@@ -137,6 +183,7 @@ const isPasswordVisible = ref(false)
                 <VBtn
                   block
                   type="submit"
+                  :disabled="!form.privacyPolicies"
                 >
                   Sign up
                 </VBtn>

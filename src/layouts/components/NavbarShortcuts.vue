@@ -28,14 +28,14 @@ const shortcuts = [
     icon: 'tabler-layout-dashboard',
     title: 'Dashboard',
     subtitle: 'Dashboard Analytics',
-    to: { name: 'dashboards-analytics' },
+    to: { name: 'ui-dashboards-analytics' },
   },
   {
     icon: 'tabler-settings',
     title: 'Settings',
     subtitle: 'Account Settings',
     to: {
-      name: 'pages-account-settings-tab',
+      name: 'ui-pages-account-settings-tab',
       params: { tab: 'account' },
     },
   },

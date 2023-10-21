@@ -19,22 +19,22 @@ const suggestionGroups = [
       {
         icon: 'tabler-chart-donut',
         title: 'Analytics',
-        url: { name: 'dashboards-analytics' },
+        url: { name: 'ui-dashboards-analytics' },
       },
       {
         icon: 'tabler-chart-bubble',
         title: 'CRM',
-        url: { name: 'dashboards-crm' },
+        url: { name: 'ui-dashboards-crm' },
       },
       {
         icon: 'tabler-file',
         title: 'Landing Page',
-        url: { name: 'front-pages-landing-page' },
+        url: { name: 'ui-front-pages-landing-page' },
       },
       {
         icon: 'tabler-users',
         title: 'User List',
-        url: { name: 'apps-user-list' },
+        url: { name: 'ui-apps-user-list' },
       },
     ],
   },
@@ -44,22 +44,22 @@ const suggestionGroups = [
       {
         icon: 'tabler-calendar',
         title: 'Calendar',
-        url: { name: 'apps-calendar' },
+        url: { name: 'ui-apps-calendar' },
       },
       {
         icon: 'tabler-shopping-cart',
         title: 'ECommerce Product',
-        url: { name: 'apps-ecommerce-product-list' },
+        url: { name: 'ui-apps-ecommerce-product-list' },
       },
       {
         icon: 'tabler-school',
         title: 'Academy',
-        url: { name: 'apps-academy-dashboard' },
+        url: { name: 'ui-apps-academy-dashboard' },
       },
       {
         icon: 'tabler-truck',
         title: 'Logistic Fleet',
-        url: { name: 'apps-logistics-fleet' },
+        url: { name: 'ui-apps-logistics-fleet' },
       },
     ],
   },
@@ -69,22 +69,22 @@ const suggestionGroups = [
       {
         icon: 'tabler-letter-a',
         title: 'Typography',
-        url: { name: 'pages-typography' },
+        url: { name: 'ui-pages-typography' },
       },
       {
         icon: 'tabler-square',
         title: 'Tabs',
-        url: { name: 'components-tabs' },
+        url: { name: 'ui-components-tabs' },
       },
       {
         icon: 'tabler-map',
         title: 'Tour',
-        url: { name: 'extensions-tour' },
+        url: { name: 'ui-extensions-tour' },
       },
       {
         icon: 'tabler-keyboard',
         title: 'Statistics',
-        url: { name: 'pages-cards-card-statistics' },
+        url: { name: 'ui-pages-cards-card-statistics' },
       },
     ],
   },
@@ -94,22 +94,22 @@ const suggestionGroups = [
       {
         icon: 'tabler-list',
         title: 'Select',
-        url: { name: 'forms-select' },
+        url: { name: 'ui-forms-select' },
       },
       {
         icon: 'tabler-currency-dollar',
         title: 'Payment',
-        url: { name: 'front-pages-payment' },
+        url: { name: 'ui-front-pages-payment' },
       },
       {
         icon: 'tabler-calendar',
         title: 'Date & Time Picker',
-        url: { name: 'forms-date-time-picker' },
+        url: { name: 'ui-forms-date-time-picker' },
       },
       {
         icon: 'tabler-home',
         title: 'Property Listing Wizard',
-        url: { name: 'wizard-examples-property-listing' },
+        url: { name: 'ui-wizard-examples-property-listing' },
       },
     ],
   },
@@ -120,20 +120,20 @@ const noDataSuggestions = [
   {
     title: 'Analytics Dashboard',
     icon: 'tabler-shopping-cart',
-    url: { name: 'dashboards-analytics' },
+    url: { name: 'ui-dashboards-analytics' },
   },
   {
     title: 'Account Settings',
     icon: 'tabler-user',
     url: {
-      name: 'pages-account-settings-tab',
+      name: 'ui-pages-account-settings-tab',
       params: { tab: 'account' },
     },
   },
   {
     title: 'Pricing Page',
     icon: 'tabler-cash',
-    url: { name: 'pages-pricing' },
+    url: { name: 'ui-pages-pricing' },
   },
 ]
 

@@ -4,8 +4,8 @@ export default [
     title: 'Charts',
     icon: { icon: 'tabler-chart-bar' },
     children: [
-      { title: 'Apex Chart', to: 'charts-apex-chart' },
-      { title: 'Chartjs', to: 'charts-chartjs' },
+      { title: 'Apex Chart', to: 'ui-charts-apex-chart' },
+      { title: 'Chartjs', to: 'ui-charts-chartjs' },
     ],
   },
 ]

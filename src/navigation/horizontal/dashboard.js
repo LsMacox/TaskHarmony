@@ -5,32 +5,32 @@ export default [
     children: [
       {
         title: 'Analytics',
-        to: 'dashboards-analytics',
+        to: 'ui-dashboards-analytics',
         icon: { icon: 'tabler-chart-pie-2' },
       },
       {
         title: 'eCommerce',
-        to: 'dashboards-ecommerce',
+        to: 'ui-dashboards-ecommerce',
         icon: { icon: 'tabler-atom-2' },
       },
       {
         title: 'CRM',
-        to: 'dashboards-crm',
+        to: 'ui-dashboards-crm',
         icon: { icon: 'tabler-3d-cube-sphere' },
       },
       {
         title: 'Ecommerce',
-        to: 'dashboards-ecommerce',
+        to: 'ui-dashboards-ecommerce',
         icon: { icon: 'tabler-shopping-cart' },
       },
       {
         title: 'Academy',
-        to: 'dashboards-academy',
+        to: 'ui-dashboards-academy',
         icon: { icon: 'tabler-book' },
       },
       {
         title: 'Logistics',
-        to: 'dashboards-logistics',
+        to: 'ui-dashboards-logistics',
         icon: { icon: 'tabler-truck' },
       },
     ],

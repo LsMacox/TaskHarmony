@@ -131,12 +131,13 @@ const resolveChipColor = tags => {
                   </div>
                   <h5 class="text-h5 mb-1">
                     <RouterLink
-                      :to="{ name: 'apps-academy-course-details' }"
+                      :to="{ name: 'ui-apps-academy-course-details' }"
                       class="course-title"
                     >
                       {{ course.courseTitle }}
                     </RouterLink>
                   </h5>
+                  <p>
                   <p>
                     {{ course.desc }}
                   </p>
@@ -174,7 +175,7 @@ const resolveChipColor = tags => {
                       variant="tonal"
                       color="secondary"
                       class="flex-grow-1"
-                      :to="{ name: 'apps-academy-course-details' }"
+                      :to="{ name: 'ui-apps-academy-course-details' }"
                     >
                       <template #prepend>
                         <VIcon
@@ -188,7 +189,7 @@ const resolveChipColor = tags => {
                       v-if="course.completedTasks !== course.totalTasks"
                       variant="tonal"
                       class="flex-grow-1"
-                      :to="{ name: 'apps-academy-course-details' }"
+                      :to="{ name: 'ui-apps-academy-course-details' }"
                     >
                       <template #append>
                         <VIcon

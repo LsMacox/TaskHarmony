@@ -1,5 +1,5 @@
 export const useEmail = () => {
-  const route = useRoute('apps-email-filter')
+  const route = useRoute('ui-apps-email-filter')
 
   const updateEmails = async (ids, data) => {
     await $api('apps/email', {

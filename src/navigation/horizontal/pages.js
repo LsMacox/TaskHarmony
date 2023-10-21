@@ -11,7 +11,7 @@ export default [
       {
         title: 'Account Settings',
         icon: { icon: 'tabler-settings' },
-        to: { name: 'pages-account-settings-tab', params: { tab: 'account' } },
+        to: { name: 'ui-pages-account-settings-tab', params: { tab: 'account' } },
       },
       { title: 'FAQ', icon: { icon: 'tabler-help' }, to: 'pages-faq' },
       { title: 'Pricing', icon: { icon: 'tabler-diamond' }, to: 'pages-pricing' },

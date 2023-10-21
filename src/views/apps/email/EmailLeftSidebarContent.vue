@@ -11,7 +11,7 @@ const folders = [
   {
     title: 'Inbox',
     prependIcon: 'tabler-mail',
-    to: { name: 'apps-email' },
+    to: { name: 'ui-apps-email' },
     badge: {
       content: '4',
       color: 'primary',
@@ -21,7 +21,7 @@ const folders = [
     title: 'Sent',
     prependIcon: 'tabler-send',
     to: {
-      name: 'apps-email-filter',
+      name: 'ui-apps-email-filter',
       params: { filter: 'sent' },
     },
   },
@@ -29,7 +29,7 @@ const folders = [
     title: 'Draft',
     prependIcon: 'tabler-pencil',
     to: {
-      name: 'apps-email-filter',
+      name: 'ui-apps-email-filter',
       params: { filter: 'draft' },
     },
     badge: {
@@ -41,7 +41,7 @@ const folders = [
     title: 'Starred',
     prependIcon: 'tabler-star',
     to: {
-      name: 'apps-email-filter',
+      name: 'ui-apps-email-filter',
       params: { filter: 'starred' },
     },
     badge: {
@@ -53,7 +53,7 @@ const folders = [
     title: 'Spam',
     prependIcon: 'tabler-info-circle',
     to: {
-      name: 'apps-email-filter',
+      name: 'ui-apps-email-filter',
       params: { filter: 'spam' },
     },
   },
@@ -61,7 +61,7 @@ const folders = [
     title: 'Trash',
     prependIcon: 'tabler-trash',
     to: {
-      name: 'apps-email-filter',
+      name: 'ui-apps-email-filter',
       params: { filter: 'trashed' },
     },
   },
@@ -72,7 +72,7 @@ const labels = [
     title: 'Personal',
     color: 'success',
     to: {
-      name: 'apps-email-label',
+      name: 'ui-apps-email-label',
       params: { label: 'personal' },
     },
   },
@@ -80,7 +80,7 @@ const labels = [
     title: 'Company',
     color: 'primary',
     to: {
-      name: 'apps-email-label',
+      name: 'ui-apps-email-label',
       params: { label: 'company' },
     },
   },
@@ -88,7 +88,7 @@ const labels = [
     title: 'Important',
     color: 'warning',
     to: {
-      name: 'apps-email-label',
+      name: 'ui-apps-email-label',
       params: { label: 'important' },
     },
   },
@@ -96,7 +96,7 @@ const labels = [
     title: 'Private',
     color: 'error',
     to: {
-      name: 'apps-email-label',
+      name: 'ui-apps-email-label',
       params: { label: 'private' },
     },
   },

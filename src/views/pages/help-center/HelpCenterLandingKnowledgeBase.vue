@@ -40,7 +40,7 @@ const props = defineProps({
             >
               <RouterLink
                 :to="{
-                  name: 'front-pages-help-center-article-title',
+                  name: 'ui-front-pages-help-center-article-title',
                   params: {
                     title: 'how-to-add-product-in-cart',
                   },
@@ -55,7 +55,7 @@ const props = defineProps({
           <div class="mt-4">
             <RouterLink
               :to="{
-                name: 'front-pages-help-center-article-title',
+                name: 'ui-front-pages-help-center-article-title',
                 params: {
                   title: 'how-to-add-product-in-cart',
                 },

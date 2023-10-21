@@ -13,7 +13,7 @@
 
     <VBtn
       color="success"
-      :to="{ name: 'components-alert' }"
+      :to="{ name: 'ui-components-alert' }"
     >
       Named Router
     </VBtn>

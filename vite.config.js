@@ -24,8 +24,8 @@ export default defineConfig({
           .toLowerCase()
       },
       beforeWriteFiles: root => {
-        root.insert('/apps/email/:filter', '/src/pages/apps/email/index.vue')
-        root.insert('/apps/email/:label', '/src/pages/apps/email/index.vue')
+        root.insert('/apps/email/:filter', '/src/pages/ui/apps/email/index.vue')
+        root.insert('/apps/email/:label', '/src/pages/ui/apps/email/index.vue')
       },
     }),
     vue({

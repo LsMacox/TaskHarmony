@@ -93,12 +93,12 @@ const hideTitleAndIcon = configStore.isVerticalNavMini(isHovered)
           <VNodeRenderer :nodes="layoutConfig.app.logo" />
 
           <Transition name="vertical-nav-app-title">
-            <h1
+            <p
               v-show="!hideTitleAndIcon"
-              class="app-logo-title leading-normal"
+              class="app-logo-title mb-0 leading-normal"
             >
               {{ layoutConfig.app.title }}
-            </h1>
+            </p>
           </Transition>
         </RouterLink>
         <!-- 👉 Vertical nav actions -->
@@ -159,7 +159,7 @@ const hideTitleAndIcon = configStore.isVerticalNavMini(isHovered)
   column-gap: 0.75rem;
 
   .app-logo-title {
-    font-size: 1.375rem;
+    font-size: 1.275rem;
     font-weight: 700;
     line-height: 1.75rem;
     text-transform: capitalize;

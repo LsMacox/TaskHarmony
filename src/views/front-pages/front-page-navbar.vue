@@ -142,7 +142,7 @@ const isPageActive = computed(() => menuItems.some(item => item.navItems.some(li
         <RouterLink
           v-for="(item, index) in ['Home', 'Features', 'Team', 'FAQ', 'Contact us']"
           :key="index"
-          :to="{ name: 'front-pages-landing-page', hash: `#${item.toLowerCase().replace(' ', '-')}` }"
+          :to="{ name: 'ui-front-pages-landing-page', hash: `#${item.toLowerCase().replace(' ', '-')}` }"
           class="nav-link font-weight-medium"
           :class="[props.activeId?.toLocaleLowerCase().replace('-', ' ') === item.toLocaleLowerCase() ? 'active-link' : '']"
         >
@@ -264,7 +264,7 @@ const isPageActive = computed(() => menuItems.some(item => item.navItems.some(li
           <RouterLink
             v-for="(item, index) in ['Home', 'Features', 'Team', 'FAQ', 'Contact us']"
             :key="index"
-            :to="{ name: 'front-pages-landing-page', hash: `#${item.toLowerCase().replace(' ', '-')}` }"
+            :to="{ name: 'ui-front-pages-landing-page', hash: `#${item.toLowerCase().replace(' ', '-')}` }"
             class="nav-link font-weight-medium py-2 px-2 px-lg-4"
             :class="[props.activeId?.toLocaleLowerCase().replace('-', ' ') === item.toLocaleLowerCase() ? 'active-link' : '']"
           >

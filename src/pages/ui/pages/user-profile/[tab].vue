@@ -7,12 +7,12 @@ import UserTeam from '@/views/pages/user-profile/team/index.vue'
 
 definePage({
   meta: {
-    navActiveLink: 'pages-user-profile-tab',
+    navActiveLink: 'ui-pages-user-profile-tab',
     key: 'tab',
   },
 })
 
-const route = useRoute('pages-user-profile-tab')
+const route = useRoute('ui-pages-user-profile-tab')
 
 const activeTab = computed({
   get: () => route.params.tab,

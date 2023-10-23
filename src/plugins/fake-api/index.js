@@ -22,10 +22,12 @@ const worker = setupWorker(...handlerAppsEcommerce, ...handlerAppsAcademy, ...ha
 export default function () {
   const workerUrl = `${import.meta.env.BASE_URL ?? '/'}mockServiceWorker.js`
 
-  worker.start({
-    serviceWorker: {
-      url: workerUrl,
-    },
-    onUnhandledRequest: 'bypass',
-  })
+  if (import.meta.env.ENABLE_MOCK_SERVER ?? true) {
+    worker.start({
+      serviceWorker: {
+        url: workerUrl,
+      },
+      onUnhandledRequest: 'bypass',
+    })
+  }
 }

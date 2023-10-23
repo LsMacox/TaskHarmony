@@ -6,7 +6,7 @@ export default [
       {
         title: 'Icons',
         icon: { icon: 'tabler-brand-tabler' },
-        to: 'ui-ui-pages-icons',
+        to: 'ui-pages-icons',
       },
       {
         title: 'Typography',

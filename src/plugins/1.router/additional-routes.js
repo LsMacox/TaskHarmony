@@ -10,10 +10,12 @@ export const redirects = [
     redirect: to => {
       // TODO: Get type from backend
       const accessToken = useCookie('accessToken')
+
       // const userData = useCookie('userData')
       // const userRole = userData.value?.role
       if (accessToken)
-        return { name: 'ui-dashboards-crm' }
+        return { name: 'file-archive' }
+
       // if (userRole === 'client')
       //   return { name: 'access-control' }
 

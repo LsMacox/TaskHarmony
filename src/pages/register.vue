@@ -45,6 +45,7 @@ const register = async () => {
         name: credentials.value.name,
         email: credentials.value.email,
         password: credentials.value.password,
+        // eslint-disable-next-line camelcase
         c_password: credentials.value.password,
       },
       onResponseError({ response }) {
@@ -52,10 +53,11 @@ const register = async () => {
       },
     })
 
-    const { accessToken, userAbilityRules } = res
+    const { accessToken, user, userAbilityRules } = res
 
     useCookie('userAbilityRules').value = userAbilityRules
     ability.update(userAbilityRules)
+    useCookie('userData').value = user
     useCookie('accessToken').value = accessToken
     await nextTick(() => {
       router.replace(route.query.to ? String(route.query.to) : '/')

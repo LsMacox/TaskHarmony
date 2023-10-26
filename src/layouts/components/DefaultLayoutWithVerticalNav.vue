@@ -46,16 +46,15 @@ watch([
           />
         </IconBtn>
 
-        <NavSearchBar class="ms-lg-n3" />
+<!--        <NavSearchBar class="ms-lg-n3" />-->
 
         <VSpacer />
 
-        <NavBarI18n
-          v-if="themeConfig.app.i18n.enable && themeConfig.app.i18n.langConfig?.length"
-          :languages="themeConfig.app.i18n.langConfig"
-        />
-        <NavbarThemeSwitcher />
-        <NavbarShortcuts />
+<!--        <NavBarI18n -->
+<!--          v-if="themeConfig.app.i18n.enable && themeConfig.app.i18n.langConfig?.length" -->
+<!--          :languages="themeConfig.app.i18n.langConfig" -->
+<!--        <NavbarThemeSwitcher /> -->
+<!--        <NavbarShortcuts /> -->
         <NavBarNotifications class="me-2" />
         <UserProfile />
       </div>

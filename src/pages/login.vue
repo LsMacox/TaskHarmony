@@ -54,10 +54,11 @@ const login = async () => {
       },
     })
 
-    const { accessToken, userAbilityRules } = res
+    const { accessToken, user, userAbilityRules } = res
 
     useCookie('userAbilityRules').value = userAbilityRules
     ability.update(userAbilityRules)
+    useCookie('userData').value = user
     useCookie('accessToken').value = accessToken
     await nextTick(() => {
       router.replace(route.query.to ? String(route.query.to) : '/')

@@ -9,7 +9,6 @@ export const Theme = {
 }
 export const Layout = {
   Vertical: 'vertical',
-  Horizontal: 'horizontal',
   Collapsed: 'collapsed',
 }
 export const Direction = {

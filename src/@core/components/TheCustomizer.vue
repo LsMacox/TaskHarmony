@@ -124,11 +124,6 @@ const layouts = computed(() => {
       value: Layout.Collapsed,
       label: 'Collapsed',
     },
-    {
-      bgImage: compact.value,
-      value: Layout.Horizontal,
-      label: 'Horizontal',
-    },
   ]
 })
 

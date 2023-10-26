@@ -1,4 +1,4 @@
-const emailRouteComponent = () => import('@/pages/ui/apps/email/index.vue')
+const groupRouteComponent = () => import('@/components/groups')
 
 // 👉 Redirects
 export const redirects = [
@@ -8,67 +8,56 @@ export const redirects = [
     path: '/',
     name: 'index',
     redirect: to => {
-      // TODO: Get type from backend
       const accessToken = useCookie('accessToken')
 
-      // const userData = useCookie('userData')
-      // const userRole = userData.value?.role
-      if (accessToken)
-        return { name: 'file-archive' }
-
-      // if (userRole === 'client')
-      //   return { name: 'access-control' }
+      // const userRole = userData.value?.roles
+      console.log(accessToken)
+      if (accessToken.value)
+        return { name: 'groups' }
 
       return { name: 'login', query: to.query }
     },
   },
-  {
-    path: '/ui/pages/user-profile',
-    name: 'ui-pages-user-profile',
-    redirect: () => ({ name: 'ui-pages-user-profile-tab', params: { tab: 'profile' } }),
-  },
-  {
-    path: '/ui/pages/account-settings',
-    name: 'ui-pages-account-settings',
-    redirect: () => ({ name: 'ui-pages-account-settings-tab', params: { tab: 'account' } }),
-  },
 ]
 export const routes = [
-  // Email filter
+  // {
+  //   path: '/groups',
+  //   name: 'groups',
+  //   component: () => import('@/pages/groups.vue'),
+  //   meta: {
+  //     navActiveLink: 'groups',
+  //     resource: 'UserGroup',
+  //     action: 'viewAny',
+  //   },
+  // },
   {
-    path: '/ui/apps/email/filter/:filter',
-    name: 'ui-apps-email-filter',
-    component: emailRouteComponent,
+    path: '/archive',
+    name: 'archive',
+    component: () => import('@/pages/archive.vue'),
     meta: {
-      navActiveLink: 'ui-apps-email',
-      layoutWrapperClasses: 'layout-content-height-fixed',
+      navActiveLink: 'archive',
+      resource: 'Archive',
+      action: 'viewAny',
     },
   },
-
-  // Email label
   {
-    path: '/apps/email/label/:label',
-    name: 'ui-apps-email-label',
-    component: emailRouteComponent,
+    path: '/access-groups',
+    name: 'access-groups',
+    component: () => import('@/pages/access-groups.vue'),
     meta: {
-      // contentClass: 'email-application',
-      navActiveLink: 'ui-apps-email',
-      layoutWrapperClasses: 'layout-content-height-fixed',
+      navActiveLink: 'access-groups',
+      resource: 'Group',
+      action: 'viewAny',
     },
   },
   {
-    path: '/ui/dashboards/logistics',
-    name: 'ui-dashboards-logistics',
-    component: () => import('@/pages/ui/apps/logistics/dashboard.vue'),
-  },
-  {
-    path: '/ui-dashboards/academy',
-    name: 'ui-dashboards-academy',
-    component: () => import('@/pages/ui/apps/academy/dashboard.vue'),
-  },
-  {
-    path: '/ui/apps/ecommerce/dashboard',
-    name: 'ui-apps-ecommerce-dashboard',
-    component: () => import('@/pages/ui/dashboards/ecommerce.vue'),
+    path: '/access-users',
+    name: 'access-users',
+    component: () => import('@/pages/access-users/list/index.vue'),
+    meta: {
+      navActiveLink: 'access-users',
+      resource: 'User',
+      action: 'viewAny',
+    },
   },
 ]

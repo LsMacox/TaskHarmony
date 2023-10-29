@@ -165,7 +165,7 @@ const deleteInvoice = async id => {
       <!-- 👉 Create invoice -->
       <VBtn
         prepend-icon="tabler-plus"
-        :to="{ name: 'ui-apps-invoice-add' }"
+        :to="{ name: 'apps-invoice-add' }"
         class="me-3"
       >
         Create invoice
@@ -227,9 +227,9 @@ const deleteInvoice = async id => {
 
       <!-- id -->
       <template #item.id="{ item }">
-        <RouterLink :to="{ name: 'ui-apps-invoice-preview-id', params: { id: item.id } }">
+        <NuxtLink :to="{ name: 'apps-invoice-preview-id', params: { id: item.id } }">
           #{{ item.id }}
-        </RouterLink>
+        </NuxtLink>
       </template>
 
       <!-- trending -->
@@ -276,12 +276,12 @@ const deleteInvoice = async id => {
             <span v-else>{{ avatarText(item.client.name) }}</span>
           </VAvatar>
           <div class="d-flex flex-column">
-            <RouterLink
+            <NuxtLink
               class="font-weight-medium mb-0 text-link"
-              :to="{ name: 'ui-pages-user-profile-tab', params: { tab: 'profile' } }"
+              :to="{ name: 'pages-user-profile-tab', params: { tab: 'profile' } }"
             >
               {{ item.client.name }}
-            </RouterLink>
+            </NuxtLink>
             <span class="text-sm text-disabled">{{ item.client.companyEmail }}</span>
           </div>
         </div>
@@ -318,7 +318,7 @@ const deleteInvoice = async id => {
           <VIcon icon="tabler-trash" />
         </IconBtn>
 
-        <IconBtn :to="{ name: 'ui-apps-invoice-preview-id', params: { id: item.id } }">
+        <IconBtn :to="{ name: 'apps-invoice-preview-id', params: { id: item.id } }">
           <VIcon icon="tabler-eye" />
         </IconBtn>
 

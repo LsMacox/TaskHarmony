@@ -479,6 +479,5 @@ declare module 'vue' {
     UserUpgradePlanDialog: typeof import('./src/components/dialogs/UserUpgradePlanDialog.vue')['default']
     VerifyEmailV1: typeof import('./src/components/ui/pages/authentication/verify-email-v1.vue')['default']
     VerifyEmailV2: typeof import('./src/components/ui/pages/authentication/verify-email-v2.vue')['default']
-    VueApexCharts: typeof import('vue3-apexcharts')['default']
   }
 }

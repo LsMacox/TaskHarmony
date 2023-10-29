@@ -28,7 +28,7 @@ export const setupGuards = router => {
       else
         return undefined
     }
-    console.log(!canNavigate(to), to)
+
     if (!canNavigate(to)) {
       /* eslint-disable indent */
           return isLoggedIn

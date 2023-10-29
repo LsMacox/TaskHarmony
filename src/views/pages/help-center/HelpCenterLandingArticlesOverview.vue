@@ -36,7 +36,7 @@ const props = defineProps({
             size="small"
             variant="tonal"
             :to="{
-              name: 'ui-front-pages-help-center-article-title',
+              name: 'front-pages-help-center-article-title',
               params: {
                 title: 'how-to-add-product-in-cart',
               },

@@ -350,6 +350,23 @@
     "watchThrottled": true,
     "watchTriggerable": true,
     "watchWithFilter": true,
-    "whenever": true
+    "whenever": true,
+    "useToast": true,
+    "lg": true,
+    "useUserStore": true,
+    "logout": true,
+    "useLogout": true,
+    "ROLES": true,
+    "useAdminWorkflowStore": true,
+    "useUserGroupStore": true,
+    "useAdminGroupStore": true,
+    "useAdminUserGroupStore": true,
+    "useApproveWorkflowStore": true,
+    "useGroupStore": true,
+    "useWorkflowStore": true,
+    "useArchiveStore": true,
+    "removeEmptyKeys": true,
+    "useAdminUserStore": true,
+    "GROUP_PERMISSIONS": true
   }
 }

@@ -41,7 +41,7 @@ const updateSelectedOption = value => {
             <VRadio :value="item.value" />
           </div>
           <slot :item="item">
-            <div class="flex-grow-1">
+            <div class="align-center flex-grow-1">
               <div class="d-flex align-center mb-1">
                 <h6 class="cr-title text-base">
                   {{ item.title }}
@@ -52,7 +52,10 @@ const updateSelectedOption = value => {
                   class="text-disabled text-base"
                 >{{ item.subtitle }}</span>
               </div>
-              <p class="text-sm mb-0">
+              <p
+                v-if="item.desc"
+                class="text-sm mb-0"
+              >
                 {{ item.desc }}
               </p>
             </div>

@@ -1,6 +1,5 @@
 <script setup>
 import { VForm } from 'vuetify/components/VForm'
-import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 import { themeConfig } from '@themeConfig'
 import authV2RegisterIllustrationBorderedDark from '@images/pages/auth-v2-register-illustration-bordered-dark.png'
@@ -12,6 +11,9 @@ import authV2MaskLight from '@images/pages/misc-mask-light.png'
 
 const imageVariant = useGenerateImageVariant(authV2RegisterIllustrationLight, authV2RegisterIllustrationDark, authV2RegisterIllustrationBorderedLight, authV2RegisterIllustrationBorderedDark, true)
 const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
+
+const ability = useAbility()
+const router = useRouter()
 
 definePage({
   meta: {
@@ -42,11 +44,11 @@ const register = async () => {
     const res = await $api('/auth/register', {
       method: 'POST',
       body: {
-        name: credentials.value.name,
-        email: credentials.value.email,
-        password: credentials.value.password,
+        name: form.value.name,
+        email: form.value.email,
+        password: form.value.password,
         // eslint-disable-next-line camelcase
-        c_password: credentials.value.password,
+        c_password: form.value.password,
       },
       onResponseError({ response }) {
         errors.value = response._data.errors
@@ -59,8 +61,9 @@ const register = async () => {
     ability.update(userAbilityRules)
     useCookie('userData').value = user
     useCookie('accessToken').value = accessToken
+
     await nextTick(() => {
-      router.replace(route.query.to ? String(route.query.to) : '/')
+      router.push('/')
     })
   } catch (err) {
     console.error(err)
@@ -203,23 +206,6 @@ const onSubmit = () => {
                 >
                   Sign in instead
                 </RouterLink>
-              </VCol>
-
-              <VCol
-                cols="12"
-                class="d-flex align-center"
-              >
-                <VDivider />
-                <span class="mx-4">or</span>
-                <VDivider />
-              </VCol>
-
-              <!-- auth providers -->
-              <VCol
-                cols="12"
-                class="text-center"
-              >
-                <AuthProvider />
               </VCol>
             </VRow>
           </VForm>

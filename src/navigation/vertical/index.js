@@ -1,4 +1,4 @@
-import main from './main'
-import accessControl from './access-control'
+import admin from './admin'
+import user from './user'
 
-export default [...main, ...accessControl]
+export default [...user, ...admin]

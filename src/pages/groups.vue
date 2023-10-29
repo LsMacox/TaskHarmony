@@ -12,9 +12,7 @@ definePage({
   <VRow
     no-gutters
     class="auth-wrapper bg-surface"
-  >
-
-  </VRow>
+  />
 </template>
 
 <style lang="scss">

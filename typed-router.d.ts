@@ -40,10 +40,8 @@ import type {
 declare module 'vue-router/auto/routes' {
   export interface RouteNamedMap {
     '$error': RouteRecordInfo<'$error', '/:error(.*)', { error: ParamValue<true> }, { error: ParamValue<false> }>,
-    'access-control': RouteRecordInfo<'access-control', '/access-control', Record<never, never>, Record<never, never>>,
-    'access-groups': RouteRecordInfo<'access-groups', '/access-groups', Record<never, never>, Record<never, never>>,
-    'access-users-list': RouteRecordInfo<'access-users-list', '/access-users/list', Record<never, never>, Record<never, never>>,
-    'access-users-view-id': RouteRecordInfo<'access-users-view-id', '/access-users/view/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
+    'admin-groups': RouteRecordInfo<'admin-groups', '/admin/groups', Record<never, never>, Record<never, never>>,
+    'admin-users': RouteRecordInfo<'admin-users', '/admin/users', Record<never, never>, Record<never, never>>,
     'archive': RouteRecordInfo<'archive', '/archive', Record<never, never>, Record<never, never>>,
     'groups': RouteRecordInfo<'groups', '/groups', Record<never, never>, Record<never, never>>,
     'login': RouteRecordInfo<'login', '/login', Record<never, never>, Record<never, never>>,

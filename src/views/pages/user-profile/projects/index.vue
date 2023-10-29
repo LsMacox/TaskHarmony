@@ -1,5 +1,5 @@
 <script setup>
-const router = useRoute('ui-pages-user-profile-tab')
+const router = useRoute('pages-user-profile-tab')
 const projectData = ref([])
 
 const fetchProjectData = async () => {

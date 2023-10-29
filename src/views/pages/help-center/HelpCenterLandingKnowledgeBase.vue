@@ -38,9 +38,9 @@ const props = defineProps({
               class="text-disabled"
               :append-icon="$vuetify.locale.isRtl ? 'tabler-chevron-left' : 'tabler-chevron-right'"
             >
-              <RouterLink
+              <NuxtLink
                 :to="{
-                  name: 'ui-front-pages-help-center-article-title',
+                  name: 'front-pages-help-center-article-title',
                   params: {
                     title: 'how-to-add-product-in-cart',
                   },
@@ -48,14 +48,14 @@ const props = defineProps({
                 class="text-high-emphasis"
               >
                 {{ item.title }}
-              </RouterLink>
+              </NuxtLink>
             </VListItem>
           </VList>
 
           <div class="mt-4">
-            <RouterLink
+            <NuxtLink
               :to="{
-                name: 'ui-front-pages-help-center-article-title',
+                name: 'front-pages-help-center-article-title',
                 params: {
                   title: 'how-to-add-product-in-cart',
                 },
@@ -69,7 +69,7 @@ const props = defineProps({
                 size="20"
                 class="ms-1"
               />
-            </RouterLink>
+            </NuxtLink>
           </div>
         </VCardText>
       </VCard>

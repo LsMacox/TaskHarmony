@@ -1,30 +1,19 @@
 <script setup>
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 
-const router = useRouter()
-const ability = useAbility()
-
 // TODO: Get type from backend
 const userData = useCookie('userData')
 
 const logout = async () => {
+  try {
+    await $api('/auth/logout', {
+      method: 'GET',
+    })
 
-  // Remove "accessToken" from cookie
-  useCookie('accessToken').value = null
-
-  // Remove "userData" from cookie
-  userData.value = null
-
-  // Redirect to login page
-  await router.push({ name: 'logout' })
-
-  // ℹ️ We had to remove abilities in then block because if we don't nav menu items mutation is visible while redirecting user to login page
-
-  // Remove "userAbilities" from cookie
-  useCookie('userAbilityRules').value = null
-
-  // Reset ability to initial ability
-  ability.update([])
+    useLogout()
+  } catch (err) {
+    console.error(err)
+  }
 }
 
 const userProfileList = [
@@ -98,9 +87,9 @@ const userProfileList = [
             </template>
 
             <VListItemTitle class="font-weight-medium">
-              {{ userData.fullName || userData.username }}
+              {{ userData.name || userData.name }}
             </VListItemTitle>
-            <VListItemSubtitle>{{ userData.role }}</VListItemSubtitle>
+            <VListItemSubtitle>{{ userData.roles[0].name ?? '' }}</VListItemSubtitle>
           </VListItem>
 
           <PerfectScrollbar :options="{ wheelPropagation: false }">

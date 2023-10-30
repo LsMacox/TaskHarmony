@@ -7,88 +7,81 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
-  groupId: {
-    type: Number,
+  groupIds: {
+    type: Array,
     required: true,
   },
 })
 
 const emit = defineEmits([
   'update:isDrawerOpen',
-  'syncUsers',
+  'add',
 ])
 
-import { genQueryObjFilter } from '@/plugins/fake-api/utils/query'
 
 const adminGroupStore = useAdminGroupStore()
-const adminUserStore = useAdminUserStore()
 const isFormValid = ref(false)
 const refForm = ref()
 
-const selectedUsers = ref([])
+const selected = ref([])
 
-const usersList = ref([])
-const usersPerpage = ref(15)
-const usersTotal = ref(0)
-const searchByUsers = ref('')
-const isUsersLoading = ref(false)
+const list = ref([])
+const perpage = ref(15)
+const total = ref(0)
+const searchBy = ref('')
+const isLoading = ref(false)
 const isMenuState = ref()
 
-
-watch(() => adminGroupStore.attachedUsers, async users => {
-  selectedUsers.value = users
-})
-
-const fetchUsers = async (page, save = true) => {
-  isUsersLoading.value = true
+const fetchGroups = async (page, save = true) => {
+  isLoading.value = true
 
   const query = {
-    perpage: usersPerpage.value,
+    perpage: perpage.value,
     page: page ? page : 1,
-    ...genQueryObjFilter(['email', '||name'], 'like', searchByUsers.value),
+
+    // ...genQueryObjFilter(['exclude_children_of'], '=', [props.groupIds]),
   }
 
-  const { data: users, meta: meta } = await adminUserStore.fetchUsers(query, false)
+  const { data: groups, meta: meta } = await adminGroupStore.fetchGroups(query, false)
 
-  isUsersLoading.value = false
-  usersTotal.value = meta.total
+  isLoading.value = false
+  total.value = meta.total
 
   if (save) {
-    usersList.value = users
+    list.value = groups
   }
 
   return {
-    users, meta,
+    groups, meta,
   }
 }
 
-const loadMoreUsers = async () => {
-  const start = usersList.value.length
+const loadMore = async () => {
+  const start = list.value.length
 
-  if (start <= usersTotal.value) {
-    const { users } = await fetchUsers(Math.ceil(usersTotal.value / start), false)
+  if (start <= total.value) {
+    const { groups } = await fetchGroups(Math.ceil(total.value / start), false)
 
-    usersList.value = [...usersList.value, ...users]
+    list.value = [...list.value, ...groups]
   }
 }
 
-const fetchSearchUsers = async () => {
+const fetchSearch = async () => {
   if (isMenuState.value) {
-    await fetchUsers()
+    await fetchGroups()
   }
 }
 
-const debouncedSearchUsers = useDebounceFn(fetchSearchUsers, 300)
+const debouncedSearch = useDebounceFn(fetchSearch, 300)
 
 watch([
-  searchByUsers,
-], () => debouncedSearchUsers())
+  searchBy,
+], () => debouncedSearch())
 
 watch(() => props.isDrawerOpen, async val => {
   if (val) {
-    usersList.value = []
-    await fetchUsers()
-    await adminGroupStore.fetchAttachedUsers(props.groupId)
+    list.value = []
+    await fetchGroups()
   }
 })
 
@@ -108,7 +101,7 @@ const closeNavigationDrawer = () => {
 const onSubmit = () => {
   refForm.value?.validate().then(({ valid }) => {
     if (valid) {
-      emit('syncUsers', selectedUsers.value)
+      emit('add', selected.value)
       emit('update:isDrawerOpen', false)
       nextTick(() => {
         refForm.value?.reset()
@@ -130,7 +123,7 @@ const onSubmit = () => {
   >
     <!-- 👉 Title -->
     <AppDrawerHeaderSection
-      title="Attach users"
+      title="Add groups"
       @cancel="closeNavigationDrawer"
     />
 
@@ -144,16 +137,15 @@ const onSubmit = () => {
             @submit.prevent="onSubmit"
           >
             <VRow>
-              <!-- 👉 Attached users -->
               <VCol cols="12">
                 <AppAutocomplete
-                  v-model="selectedUsers"
-                  v-model:search="searchByUsers"
-                  :items="usersList"
-                  item-title="email"
+                  v-model="selected"
+                  v-model:search="searchBy"
+                  :items="list"
+                  item-title="name"
                   item-value="id"
-                  label="Select users to attach"
-                  placeholder="Select users to attach"
+                  label="Select groups to add"
+                  placeholder="Select groups to add"
                   clearable
                   clear-icon="tabler-x"
                   multiple
@@ -161,7 +153,7 @@ const onSubmit = () => {
                 >
                   <template #append-item>
                     <div
-                      v-if="isUsersLoading"
+                      v-if="isLoading"
                       class="text-center my-2"
                     >
                       Loading...
@@ -169,7 +161,7 @@ const onSubmit = () => {
                     <div
                       v-else
                       class="text-center my-2 cursor-pointer"
-                      @click="loadMoreUsers"
+                      @click="loadMore"
                     >
                       Load more
                     </div>
@@ -183,7 +175,7 @@ const onSubmit = () => {
                   type="submit"
                   class="me-3"
                 >
-                  Attach
+                  Add
                 </VBtn>
                 <VBtn
                   type="reset"

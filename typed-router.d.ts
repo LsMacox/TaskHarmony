@@ -41,7 +41,10 @@ declare module 'vue-router/auto/routes' {
   export interface RouteNamedMap {
     '$error': RouteRecordInfo<'$error', '/:error(.*)', { error: ParamValue<true> }, { error: ParamValue<false> }>,
     'admin-groups': RouteRecordInfo<'admin-groups', '/admin/groups', Record<never, never>, Record<never, never>>,
+    'admin-groups-group-id-workflows-add': RouteRecordInfo<'admin-groups-group-id-workflows-add', '/admin/groups/:groupId/workflows/add', { groupId: ParamValue<true> }, { groupId: ParamValue<false> }>,
     'admin-users': RouteRecordInfo<'admin-users', '/admin/users', Record<never, never>, Record<never, never>>,
+    'admin-workflows': RouteRecordInfo<'admin-workflows', '/admin/workflows', Record<never, never>, Record<never, never>>,
+    'admin-workflows-id': RouteRecordInfo<'admin-workflows-id', '/admin/workflows/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     'archive': RouteRecordInfo<'archive', '/archive', Record<never, never>, Record<never, never>>,
     'groups': RouteRecordInfo<'groups', '/groups', Record<never, never>, Record<never, never>>,
     'login': RouteRecordInfo<'login', '/login', Record<never, never>, Record<never, never>>,

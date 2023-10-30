@@ -1,45 +1,30 @@
 <script setup>
 definePage({
   meta: {
-    navActiveLink: 'admin-groups',
-    subject: 'Group',
+    navActiveLink: 'admin-workflows',
+    subject: 'Workflow',
     action: 'viewAny',
   },
 })
 
 import { genQueryObjFilter, genQueryObjFSortBy } from '@/plugins/fake-api/utils/query'
-import GroupDrawer from '@/views/apps/groups/GroupDrawer.vue'
-import GroupUserAttachDrawer from '@/views/apps/groups/GroupUserAttachDrawer.vue'
-import GroupUserPermissionDrawer from '@/views/apps/groups/GroupUserPermissionDrawer.vue'
 import { paginationMeta } from '@api-utils/paginationMeta'
 import { watch } from 'vue'
 import { VDataTableServer } from 'vuetify/labs/VDataTable'
 
 const router = useRouter()
-const store = useAdminGroupStore()
-const adminUserGroupStore = useAdminUserGroupStore()
+const store = useAdminWorkflowStore()
 const searchQuery = ref('')
 const editId = ref()
-const userAttachGroupId = ref()
-const userPermissionGroupId = ref()
 
 // Data table options
+const createdAtRange = ref()
 const itemsPerPage = ref(10)
 const page = ref(1)
 const sortBy = ref([])
 
-const { groups } = storeToRefs(store)
-const total = computed(() => groups.value?.meta?.total ?? 0)
-const isDrawerVisible = ref(false)
-const isUserAttachDrawerVisible = ref(false)
-const isUserPermissionDrawerVisible = ref(false)
-const selectedDepartmentRadio = ref('department')
-const isDepartment = computed(() => selectedDepartmentRadio.value === 'department')
-
-const departmentRadioList = [
-  { title: 'Department', desc: 'example: IT', value: 'department' },
-  { title: 'Group', desc: 'example: back', value: 'group' },
-]
+const { workflows } = storeToRefs(store)
+const total = computed(() => workflows.value?.meta?.total ?? 0)
 
 // Headers
 const headers = ref([
@@ -52,13 +37,12 @@ const headers = ref([
     key: 'name',
   },
   {
-    title: 'Parent',
-    key: 'parent_name',
-    sortable: false,
+    title: 'State',
+    key: 'state',
   },
   {
-    title: 'Description',
-    key: 'description',
+    title: 'Created at',
+    key: 'created_at',
   },
   {
     title: 'Actions',
@@ -73,33 +57,17 @@ watch([
   page,
   itemsPerPage,
   sortBy,
-  selectedDepartmentRadio,
 ], val => fetchList())
-
-watch(() => selectedDepartmentRadio.value, val => {
-  if (val === 'department') {
-    headers.value = headers.value.filter(header => header.key !== 'parent_name')
-  } else {
-    if (!headers.value.some(header => header.key === 'parent_name')) {
-      headers.value.splice(2, 0, {
-        title: 'Parent',
-        key: 'parent_name',
-        sortable: false,
-      })
-    }
-  }
-})
 
 onMounted(async () => {
   await fetchList()
 })
 
 async function fetchList () {
-  await store.fetchGroups({
+  await store.fetchWorkflows({
     perpage: itemsPerPage.value,
     page: page.value,
     ...genQueryObjFilter(['name'], 'like', searchQuery.value),
-    ...genQueryObjFilter(['v:is_department'], '=', selectedDepartmentRadio.value === 'department' ? '1' : '0'),
     ...genQueryObjFSortBy(sortBy.value),
   })
 }
@@ -112,47 +80,15 @@ const updateOptions = async options => {
 }
 
 const showCreate = () => {
-  editId.value = null
-  isDrawerVisible.value = true 
+  router.push(`/admin/workflows`)
 }
 
 const showEdit = id => {
-  editId.value = id
-  isDrawerVisible.value = true 
-}
-
-const showUserAttachDrawer = id => {
-  userAttachGroupId.value = id
-  isUserAttachDrawerVisible.value = true 
-}
-
-const showUserPermissionDrawer = id => {
-  userPermissionGroupId.value = id
-  isUserPermissionDrawerVisible.value = true 
-}
-
-const openWorkflowPage = id => {
-  router.push(`/admin/groups/${id}/workflows/add`)
-}
-
-const handleData = async data => {
-  if (editId.value) {
-    await store.updateGroup(editId.value, data)
-  } else {
-    await store.storeGroup(data)
-  }
-
-  fetchList()
-}
-
-const attachGroupUsers = userIds => {
-  adminUserGroupStore.syncUsers(userAttachGroupId.value, userIds)
-  userAttachGroupId.value = null
+  router.push(`/admin/workflows/${id}`)
 }
 
 const fetchDelete = async id => {
-  await store.deleteGroup(id)
-  editId.value = null
+  await store.deleteWorkflow(id)
   fetchList()
 }
 </script>
@@ -170,10 +106,11 @@ const fetchDelete = async id => {
             cols="12"
             sm="4"
           >
-            <CustomRadios
-              v-model:selected-radio="selectedDepartmentRadio"
-              :radio-content="departmentRadioList"
-              :grid-column="{ cols: '12', sm: '6' }"
+            <AppDateTimePicker
+              v-model="createdAtRange"
+              label="Range"
+              placeholder="Select date"
+              :config="{ mode: 'range' }"
             />
           </VCol>
         </VRow>
@@ -211,7 +148,7 @@ const fetchDelete = async id => {
             prepend-icon="tabler-plus"
             @click="showCreate"
           >
-            Add New {{ isDepartment ? 'Department' : 'Group' }}
+            Add new Workflow
           </VBtn>
         </div>
       </VCardText>
@@ -222,7 +159,7 @@ const fetchDelete = async id => {
       <VDataTableServer
         v-model:items-per-page="itemsPerPage"
         v-model:page="page"
-        :items="groups.data"
+        :items="workflows.data"
         :items-length="total"
         :headers="headers"
         class="text-no-wrap"
@@ -240,40 +177,6 @@ const fetchDelete = async id => {
               @click="showEdit(item.id)"
             />
           </IconBtn>
-          
-          <VBtn
-            icon
-            variant="text"
-            size="small"
-            color="medium-emphasis"
-          >
-            <VIcon
-              size="24"
-              icon="tabler-dots-vertical"
-            />
-            <VMenu activator="parent">
-              <VList>
-                <VListItem @click="openWorkflowPage(item.id)">
-                  <template #prepend>
-                    <VIcon icon="tabler-tornado" />
-                  </template>
-                  <VListItemTitle>Create workflow</VListItemTitle>
-                </VListItem>
-                <VListItem @click="showUserAttachDrawer(item.id)">
-                  <template #prepend>
-                    <VIcon icon="tabler-user-bolt" />
-                  </template>
-                  <VListItemTitle>Users attach</VListItemTitle>
-                </VListItem>
-                <VListItem @click="showUserPermissionDrawer(item.id)">
-                  <template #prepend>
-                    <VIcon icon="tabler-user-cog" />
-                  </template>
-                  <VListItemTitle>Users permissions</VListItemTitle>
-                </VListItem>
-              </VList>
-            </VMenu>
-          </VBtn>
         </template>
 
         <!-- pagination -->
@@ -316,21 +219,5 @@ const fetchDelete = async id => {
       </VDataTableServer>
       <!-- SECTION -->
     </VCard>
-
-    <GroupDrawer
-      v-model:isDrawerOpen="isDrawerVisible"
-      :edit-id="editId"
-      :is-department="isDepartment"
-      @data="handleData"
-    />
-    <GroupUserAttachDrawer
-      v-model:isDrawerOpen="isUserAttachDrawerVisible"
-      :group-id="userAttachGroupId"
-      @sync-users="attachGroupUsers"
-    />
-    <GroupUserPermissionDrawer
-      v-model:isDrawerOpen="isUserPermissionDrawerVisible"
-      :group-id="userPermissionGroupId"
-    />
   </section>
 </template>

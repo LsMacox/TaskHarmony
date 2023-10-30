@@ -367,6 +367,7 @@
     "useArchiveStore": true,
     "removeEmptyKeys": true,
     "useAdminUserStore": true,
-    "GROUP_PERMISSIONS": true
+    "GROUP_PERMISSIONS": true,
+    "useNotificationStore": true
   }
 }

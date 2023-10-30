@@ -5,14 +5,16 @@ export const useAdminUserStore = defineStore('admin-user', () => {
   const users = ref([])
   const toast = useToast()
 
-  async function fetchUsers(query)
+  async function fetchUsers(query, save = true)
   {
     const response = await $api(`/admin/users`, { 
       method: 'GET', 
       query,
     })
 
-    users.value = response
+    if (save) {
+      users.value = response
+    }
 
     return response
   }

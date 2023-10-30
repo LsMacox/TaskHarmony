@@ -2,9 +2,14 @@
 const props = defineProps({
   id: Number,
   text: String,
+  isGroup: Boolean,
   index: Number,
   moveCard: Function,
 })
+
+defineEmits([
+  'remove',
+])
 
 import { toRefs } from '@vueuse/core'
 import { computed, ref, unref } from 'vue'
@@ -83,7 +88,19 @@ const setRef = el => {
     :style="{ opacity }"
     :data-handler-id="handlerId"
   >
-    {{ text }}
+    <VRow
+      align="center"
+      justify="space-between"
+    >
+      <VCol cols="auto">
+        {{ (props.isGroup ? 'Group: ' : 'User: ') + text }}
+      </VCol>
+      <VCol cols="auto">
+        <VBtn @click="$emit('remove', id)">
+          Remove
+        </VBtn>
+      </VCol>
+    </VRow>
   </div>
 </template>
 

@@ -5,6 +5,13 @@ export default [
     action: 'viewAny',
   },
   {
+    title: 'Workflows',
+    icon: { icon: 'tabler-tornado' },
+    to: { name: 'admin-workflows' },
+    subject: 'Workflow',
+    action: 'viewAny',
+  },
+  {
     title: 'Users',
     icon: { icon: 'tabler-user-circle' },
     to: { name: 'admin-users' },

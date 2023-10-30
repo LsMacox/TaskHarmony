@@ -1,16 +1,34 @@
 import { useToast } from '@/plugins/toast/composables/useToast'
 import { ofetch } from 'ofetch'
 
+function transformQuery(params) {
+  let result = {}
+  for (let key in params) {
+    if (Array.isArray(params[key])) {
+      result[key + '[]'] = params[key]
+    } else {
+      result[key] = params[key]
+    }
+  }
+  
+  return result
+}
+
 export const $api = ofetch.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
   onRequest({ options }) {
     const accessToken = useCookie('accessToken').value
+
     if (accessToken) {
       options.headers = {
         ...options.headers,
         Accept: "application/json",
         Authorization: `Bearer ${accessToken}`,
       }
+    }
+
+    if (options.query) {
+      options.query = transformQuery(options.query)
     }
   },
   onResponse({ request, response, options }) {

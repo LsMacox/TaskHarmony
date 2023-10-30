@@ -17,5 +17,9 @@ export const redirects = [
   },
 ]
 export const routes = [
-
+  // {
+  //   path: '/admin/groups/workflows/:id',
+  //   name: 'admin-group-workflow',
+  //   component: () => import('@/pages/admin/workflows/[id].vue'),
+  // },
 ]

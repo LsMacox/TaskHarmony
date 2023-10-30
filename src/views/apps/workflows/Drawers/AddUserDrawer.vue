@@ -7,20 +7,21 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
-  groupId: {
-    type: Number,
-    required: true,
+  groupIds: {
+    type: Array,
+  },
+  userIds: {
+    type: Array,
   },
 })
 
 const emit = defineEmits([
   'update:isDrawerOpen',
-  'syncUsers',
+  'add',
 ])
 
 import { genQueryObjFilter } from '@/plugins/fake-api/utils/query'
 
-const adminGroupStore = useAdminGroupStore()
 const adminUserStore = useAdminUserStore()
 const isFormValid = ref(false)
 const refForm = ref()
@@ -34,11 +35,6 @@ const searchByUsers = ref('')
 const isUsersLoading = ref(false)
 const isMenuState = ref()
 
-
-watch(() => adminGroupStore.attachedUsers, async users => {
-  selectedUsers.value = users
-})
-
 const fetchUsers = async (page, save = true) => {
   isUsersLoading.value = true
 
@@ -46,6 +42,9 @@ const fetchUsers = async (page, save = true) => {
     perpage: usersPerpage.value,
     page: page ? page : 1,
     ...genQueryObjFilter(['email', '||name'], 'like', searchByUsers.value),
+
+    // ...genQueryObjFilter(['exclude_from_groups'], '=', [props.groupIds]),
+    ...genQueryObjFilter(['id'], '!=', [props.userIds]),
   }
 
   const { data: users, meta: meta } = await adminUserStore.fetchUsers(query, false)
@@ -88,7 +87,6 @@ watch(() => props.isDrawerOpen, async val => {
   if (val) {
     usersList.value = []
     await fetchUsers()
-    await adminGroupStore.fetchAttachedUsers(props.groupId)
   }
 })
 
@@ -108,7 +106,7 @@ const closeNavigationDrawer = () => {
 const onSubmit = () => {
   refForm.value?.validate().then(({ valid }) => {
     if (valid) {
-      emit('syncUsers', selectedUsers.value)
+      emit('add', selectedUsers.value)
       emit('update:isDrawerOpen', false)
       nextTick(() => {
         refForm.value?.reset()
@@ -130,7 +128,7 @@ const onSubmit = () => {
   >
     <!-- 👉 Title -->
     <AppDrawerHeaderSection
-      title="Attach users"
+      title="Add users"
       @cancel="closeNavigationDrawer"
     />
 
@@ -144,7 +142,6 @@ const onSubmit = () => {
             @submit.prevent="onSubmit"
           >
             <VRow>
-              <!-- 👉 Attached users -->
               <VCol cols="12">
                 <AppAutocomplete
                   v-model="selectedUsers"
@@ -152,8 +149,8 @@ const onSubmit = () => {
                   :items="usersList"
                   item-title="email"
                   item-value="id"
-                  label="Select users to attach"
-                  placeholder="Select users to attach"
+                  label="Select users to add"
+                  placeholder="Select users to add"
                   clearable
                   clear-icon="tabler-x"
                   multiple
@@ -183,7 +180,7 @@ const onSubmit = () => {
                   type="submit"
                   class="me-3"
                 >
-                  Attach
+                  Add
                 </VBtn>
                 <VBtn
                   type="reset"

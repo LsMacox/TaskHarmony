@@ -12,10 +12,12 @@ export const genQueryObjFilter = (fields, operator, values) => {
 
     let value = null 
 
-    if (Array.isArray(values) && fields.length === values.length) {
+    if (Array.isArray(values) && !Array.isArray(values[index]) && fields.length === values.length) {
       value = values[index]
     } else if (typeof values === 'string' && values) {
       value = values
+    } else {
+      value = values[index]
     }
 
     if (value) {
@@ -23,9 +25,13 @@ export const genQueryObjFilter = (fields, operator, values) => {
         value = '%' + value + '%'
       }
 
-      if (field.startsWith('r:') || field.startsWith('v:')) {
-        field = field.slice(2)
-        query[`${field}`] = value
+      if (field.startsWith('r:') || field.startsWith('v:') || Array.isArray(value)) {
+        if (Array.isArray(value)) {
+          query[`${field}`] = value
+        } else {
+          field = field.slice(2)
+          query[`${field}`] = value
+        }
       }else {
         if (field.startsWith('||')) {
           field = field.slice(2)

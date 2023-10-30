@@ -1,9 +1,9 @@
 export default [
   {
-    title: 'Groups',
-    icon: { icon: 'tabler-box-multiple' },
+    title: 'Workflows',
+    icon: { icon: 'tabler-tornado' },
     to: { name: 'groups' },
-    subject: 'UserGroup',
+    subject: 'UserWorkflow',
     action: 'viewAny',
   },
   {

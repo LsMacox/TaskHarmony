@@ -57,7 +57,7 @@ export const useAdminWorkflowStore = defineStore('admin-workflow', () => {
         body: data,
       })
 
-      toast.success('Success!')
+      toast.success('Workflow created!')
     } catch(err) {}
   }
 
@@ -69,7 +69,7 @@ export const useAdminWorkflowStore = defineStore('admin-workflow', () => {
         body: removeEmptyKeys(data),
       })
 
-      toast.success('Success!')
+      toast.success('Workflow updated!')
     } catch(err) {}
   }
 

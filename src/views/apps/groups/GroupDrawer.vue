@@ -56,7 +56,7 @@ const fetchParentList = async (page, save = true) => {
   const query = {
     perpage: parentListPerPage.value,
     page: page ? page : 1,
-    ...genQueryObjFilter(['name', '||description'], 'like', searchByParentList.value),
+    ...genQueryObjFilter(['name', '||description'], 'like', [searchByParentList.value, searchByParentList.value]),
   }
 
   const { data: groups, meta: meta } = await store.fetchGroups(query, false)

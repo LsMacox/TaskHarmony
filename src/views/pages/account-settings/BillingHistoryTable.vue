@@ -1,6 +1,6 @@
 <script setup>
-import { VDataTableServer } from 'vuetify/labs/VDataTable'
-import { paginationMeta } from '@api-utils/paginationMeta'
+import { paginationMeta } from '@api-utils/paginationMeta';
+import { VDataTableServer } from 'vuetify/labs/VDataTable';
 
 const searchQuery = ref('')
 const selectedStatus = ref()
@@ -333,13 +333,13 @@ const deleteInvoice = async id => {
         <VDivider />
         <div class="d-flex align-center justify-sm-space-between justify-center flex-wrap gap-3 pa-5 pt-3">
           <p class="text-sm text-disabled mb-0">
-            {{ paginationMeta({ page, itemsPerPage }, totalInvoices) }}
+            {{ paginationMeta({ page, perpage }, totalInvoices) }}
           </p>
 
           <VPagination
             v-model="page"
-            :length="Math.ceil(totalInvoices / itemsPerPage)"
-            :total-visible="$vuetify.display.xs ? 1 : Math.ceil(totalInvoices / itemsPerPage)"
+            :length="Math.ceil(totalInvoices / perpage)"
+            :total-visible="$vuetify.display.xs ? 1 : Math.ceil(totalInvoices / perpage)"
           >
             <template #prev="slotProps">
               <VBtn

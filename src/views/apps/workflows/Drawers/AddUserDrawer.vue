@@ -26,34 +26,33 @@ const adminUserStore = useAdminUserStore()
 const isFormValid = ref(false)
 const refForm = ref()
 
-const selectedUsers = ref([])
+const selected = ref([])
 
-const usersList = ref([])
-const usersPerpage = ref(15)
-const usersTotal = ref(0)
-const searchByUsers = ref('')
-const isUsersLoading = ref(false)
+const list = ref([])
+const perpage = ref(15)
+const total = ref(0)
+const searchBy = ref('')
+const isLoading = ref(false)
 const isMenuState = ref()
 
 const fetchUsers = async (page, save = true) => {
-  isUsersLoading.value = true
+  isLoading.value = true
 
   const query = {
-    perpage: usersPerpage.value,
+    perpage: perpage.value,
     page: page ? page : 1,
-    ...genQueryObjFilter(['email', '||name'], 'like', searchByUsers.value),
-
-    // ...genQueryObjFilter(['exclude_from_groups'], '=', [props.groupIds]),
-    ...genQueryObjFilter(['id'], '!=', [props.userIds]),
+    ...genQueryObjFilter(['email', '||name'], 'like', searchBy.value),
+    ...genQueryObjFilter('exclude_from_groups', '=', props.groupIds),
+    ...genQueryObjFilter('id', '!=', props.userIds),
   }
 
   const { data: users, meta: meta } = await adminUserStore.fetchUsers(query, false)
 
-  isUsersLoading.value = false
-  usersTotal.value = meta.total
+  isLoading.value = false
+  total.value = meta.total
 
   if (save) {
-    usersList.value = users
+    list.value = users
   }
 
   return {
@@ -62,12 +61,12 @@ const fetchUsers = async (page, save = true) => {
 }
 
 const loadMoreUsers = async () => {
-  const start = usersList.value.length
+  const start = list.value.length
 
-  if (start <= usersTotal.value) {
-    const { users } = await fetchUsers(Math.ceil(usersTotal.value / start), false)
+  if (start < total.value) {
+    const { users } = await fetchUsers(Math.ceil(total.value / start), false)
 
-    usersList.value = [...usersList.value, ...users]
+    list.value = [...list.value, ...users]
   }
 }
 
@@ -80,12 +79,12 @@ const fetchSearchUsers = async () => {
 const debouncedSearchUsers = useDebounceFn(fetchSearchUsers, 300)
 
 watch([
-  searchByUsers,
+  searchBy,
 ], () => debouncedSearchUsers())
 
 watch(() => props.isDrawerOpen, async val => {
   if (val) {
-    usersList.value = []
+    list.value = []
     await fetchUsers()
   }
 })
@@ -106,7 +105,7 @@ const closeNavigationDrawer = () => {
 const onSubmit = () => {
   refForm.value?.validate().then(({ valid }) => {
     if (valid) {
-      emit('add', selectedUsers.value)
+      emit('add', selected.value)
       emit('update:isDrawerOpen', false)
       nextTick(() => {
         refForm.value?.reset()
@@ -144,9 +143,9 @@ const onSubmit = () => {
             <VRow>
               <VCol cols="12">
                 <AppAutocomplete
-                  v-model="selectedUsers"
-                  v-model:search="searchByUsers"
-                  :items="usersList"
+                  v-model="selected"
+                  v-model:search="searchBy"
+                  :items="list"
                   item-title="email"
                   item-value="id"
                   label="Select users to add"
@@ -158,7 +157,7 @@ const onSubmit = () => {
                 >
                   <template #append-item>
                     <div
-                      v-if="isUsersLoading"
+                      v-if="isLoading"
                       class="text-center my-2"
                     >
                       Loading...

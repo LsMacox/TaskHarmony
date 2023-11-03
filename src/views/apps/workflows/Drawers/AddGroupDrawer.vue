@@ -19,6 +19,8 @@ const emit = defineEmits([
 ])
 
 
+import { genQueryObjFilter } from '@/plugins/fake-api/utils/query'
+
 const adminGroupStore = useAdminGroupStore()
 const isFormValid = ref(false)
 const refForm = ref()
@@ -38,8 +40,8 @@ const fetchGroups = async (page, save = true) => {
   const query = {
     perpage: perpage.value,
     page: page ? page : 1,
-
-    // ...genQueryObjFilter(['exclude_children_of'], '=', [props.groupIds]),
+    ...genQueryObjFilter('include_children_of', '=', [props.groupIds[0]]),
+    ...genQueryObjFilter('exclude_children_of', '=', props.groupIds.slice(1)),
   }
 
   const { data: groups, meta: meta } = await adminGroupStore.fetchGroups(query, false)
@@ -59,7 +61,7 @@ const fetchGroups = async (page, save = true) => {
 const loadMore = async () => {
   const start = list.value.length
 
-  if (start <= total.value) {
+  if (start < total.value) {
     const { groups } = await fetchGroups(Math.ceil(total.value / start), false)
 
     list.value = [...list.value, ...groups]

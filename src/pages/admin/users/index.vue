@@ -14,12 +14,12 @@ import { watch } from 'vue'
 import { VDataTableServer } from 'vuetify/labs/VDataTable'
 
 const store = useAdminUserStore()
-const searchQuery = ref('')
+const searchBy = ref('')
 const selectedRole = ref()
 const editId = ref()
 
 // Data table options
-const itemsPerPage = ref(10)
+const perpage = ref(10)
 const page = ref(1)
 const sortBy = ref([])
 
@@ -28,11 +28,11 @@ const total = computed(() => users.value?.meta?.total ?? 0)
 const isDrawerVisible = ref(false)
 
 
-watch(() => searchQuery.value, val => debouncedFetchList())
+watch(() => searchBy.value, val => debouncedFetchList())
 
 watch([
   page,
-  itemsPerPage,
+  perpage,
   sortBy,
   selectedRole,
 ], val => fetchList())
@@ -43,10 +43,10 @@ onMounted(async () => {
 
 async function fetchList () {
   await store.fetchUsers({
-    perpage: itemsPerPage.value,
+    perpage: perpage.value,
     page: page.value,
-    ...genQueryObjFilter(['email', '||name'], 'like', searchQuery.value),
-    ...genQueryObjFilter(['r:roles[name]'], '=', selectedRole.value),
+    ...genQueryObjFilter(['email', '||name'], 'like', [searchBy.value, searchBy.value]),
+    ...genQueryObjFilter('r:roles[name]', '=', selectedRole.value),
     ...genQueryObjFSortBy(sortBy.value),
   })
 }
@@ -187,7 +187,7 @@ const resolveUserStatusVariant = stat => {
       <VCardText class="d-flex flex-wrap py-4 gap-4">
         <div class="me-3 d-flex gap-3">
           <AppSelect
-            :model-value="itemsPerPage"
+            :model-value="perpage"
             :items="[
               { value: 10, title: '10' },
               { value: 25, title: '25' },
@@ -195,7 +195,7 @@ const resolveUserStatusVariant = stat => {
               { value: 100, tinliitle: '100' },
             ]"
             style="ne-size: 6.25rem;"
-            @update:model-value="itemsPerPage = parseInt($event, 10)"
+            @update:model-value="perpage = parseInt($event, 10)"
           />
         </div>
         <VSpacer />
@@ -204,7 +204,7 @@ const resolveUserStatusVariant = stat => {
           <!-- 👉 Search  -->
           <div style="inline-size: 10rem;">
             <AppTextField
-              v-model="searchQuery"
+              v-model="searchBy"
               placeholder="Search"
               density="compact"
             />
@@ -224,7 +224,7 @@ const resolveUserStatusVariant = stat => {
 
       <!-- SECTION datatable -->
       <VDataTableServer
-        v-model:items-per-page="itemsPerPage"
+        v-model:items-per-page="perpage"
         v-model:page="page"
         :items="users.data"
         :items-length="total"
@@ -301,13 +301,13 @@ const resolveUserStatusVariant = stat => {
           <VDivider />
           <div class="d-flex align-center justify-sm-space-between justify-center flex-wrap gap-3 pa-5 pt-3">
             <p class="text-sm text-disabled mb-0">
-              {{ paginationMeta({ page, itemsPerPage }, total) }}
+              {{ paginationMeta({ page, perpage }, total) }}
             </p>
 
             <VPagination
               v-model="page"
-              :length="Math.ceil(total / itemsPerPage)"
-              :total-visible="$vuetify.display.xs ? 1 : Math.ceil(total / itemsPerPage)"
+              :length="Math.ceil(total / perpage)"
+              :total-visible="$vuetify.display.xs ? 1 : Math.ceil(total / perpage)"
             >
               <template #prev="slotProps">
                 <VBtn

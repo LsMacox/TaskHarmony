@@ -1,7 +1,5 @@
 <!-- ❗Errors in the form are set on line 60 -->
 <script setup>
-import { VForm } from 'vuetify/components/VForm'
-import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
 import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant'
 import authV2LoginIllustrationBorderedDark from '@images/pages/auth-v2-login-illustration-bordered-dark.png'
 import authV2LoginIllustrationBorderedLight from '@images/pages/auth-v2-login-illustration-bordered-light.png'
@@ -11,6 +9,7 @@ import authV2MaskDark from '@images/pages/misc-mask-dark.png'
 import authV2MaskLight from '@images/pages/misc-mask-light.png'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 import { themeConfig } from '@themeConfig'
+import { VForm } from 'vuetify/components/VForm'
 
 const authThemeImg = useGenerateImageVariant(authV2LoginIllustrationLight, authV2LoginIllustrationDark, authV2LoginIllustrationBorderedLight, authV2LoginIllustrationBorderedDark, true)
 const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
@@ -26,6 +25,7 @@ const isPasswordVisible = ref(false)
 const route = useRoute()
 const router = useRouter()
 const ability = useAbility()
+const isLoading = ref(false)
 
 const errors = ref({
   email: undefined,
@@ -43,6 +43,8 @@ const rememberMe = ref(false)
 
 const login = async () => {
   try {
+    isLoading.value = true
+
     const res = await $api('/auth/login', {
       method: 'POST',
       body: {
@@ -65,6 +67,8 @@ const login = async () => {
     })
   } catch (err) {
     console.error(err)
+  } finally {
+    isLoading.value = false
   }
 }
 
@@ -156,23 +160,12 @@ const onSubmit = () => {
                   @click:append-inner="isPasswordVisible = !isPasswordVisible"
                 />
 
-<!--                <div class="d-flex align-center flex-wrap justify-space-between mt-1 mb-4">-->
-<!--                  <VCheckbox-->
-<!--                    v-model="rememberMe"-->
-<!--                    label="Remember me"-->
-<!--                  />-->
-<!--                  <RouterLink-->
-<!--                    class="text-primary ms-2 mb-1"-->
-<!--                    :to="{ name: 'forgot-password' }"-->
-<!--                  >-->
-<!--                    Forgot Password?-->
-<!--                  </RouterLink>-->
-<!--                </div>-->
 
                 <VBtn
                   block
                   type="submit"
                   class="mt-5"
+                  :loading="isLoading"
                 >
                   Login
                 </VBtn>
@@ -191,22 +184,6 @@ const onSubmit = () => {
                   Create an account
                 </RouterLink>
               </VCol>
-<!--              <VCol-->
-<!--                cols="12"-->
-<!--                class="d-flex align-center"-->
-<!--              >-->
-<!--                <VDivider />-->
-<!--                <span class="mx-4">or</span>-->
-<!--                <VDivider />-->
-<!--              </VCol>-->
-
-<!--              &lt;!&ndash; auth providers &ndash;&gt;-->
-<!--              <VCol-->
-<!--                cols="12"-->
-<!--                class="text-center"-->
-<!--              >-->
-<!--                <AuthProvider />-->
-<!--              </VCol>-->
             </VRow>
           </VForm>
         </VCardText>

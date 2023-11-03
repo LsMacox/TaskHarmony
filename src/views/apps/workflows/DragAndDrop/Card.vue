@@ -107,7 +107,7 @@ const setRef = el => {
 <style lang="scss" scoped>
 .card {
   border: 1px dashed gray;
-  background-color: white;
+  background-color: transparent;
   cursor: move;
   margin-block-end: 0.5rem;
   padding-block: 0.5rem;

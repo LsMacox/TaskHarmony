@@ -22,31 +22,31 @@ const adminUserGroupStore = useAdminUserGroupStore()
 const isFormValid = ref(false)
 const refForm = ref()
 
-const selectedUser = ref()
+const selected = ref()
 const selectedPermission = ref()
 
-const usersList = ref([])
-const searchByUser = ref('')
-const isUsersLoading = ref(false)
+const list = ref([])
+const searchBy = ref('')
+const isLoading = ref(false)
 const isMenuState = ref()
 
-watch(() => selectedUser.value, async user => {
+watch(() => selected.value, async user => {
   const response = await adminUserGroupStore.fetchGroupPermissions(user, props.groupId)
 
-  if (response.permissions) {
+  if (response?.permissions) {
     selectedPermission.value = response.permissions
   }
 })
 
 const fetchAttachedUsers = async (save = true) => {
-  isUsersLoading.value = true
+  isLoading.value = true
 
   const { data: users } = await adminGroupStore.fetchAttachedUsers(props.groupId, false)
 
-  isUsersLoading.value = false
+  isLoading.value = false
 
   if (save) {
-    usersList.value = users
+    list.value = users
   }
 
   return {
@@ -63,12 +63,12 @@ const fetchSearchUsers = async () => {
 const debouncedSearchUsers = useDebounceFn(fetchSearchUsers, 300)
 
 watch([
-  searchByUser,
+  searchBy,
 ], () => debouncedSearchUsers())
 
 watch(() => props.isDrawerOpen, async val => {
   if (val) {
-    usersList.value = []
+    list.value = []
     await fetchAttachedUsers()
   }
 })
@@ -89,7 +89,7 @@ const closeNavigationDrawer = () => {
 const onSubmit = () => {
   refForm.value?.validate().then(async ({ valid }) => {
     if (valid) {
-      await adminUserGroupStore.updateGroupPermissions(selectedUser.value, props.groupId, {
+      await adminUserGroupStore.updateGroupPermissions(selected.value, props.groupId, {
         permissions: selectedPermission.value,
       })
       await nextTick()
@@ -127,9 +127,9 @@ const onSubmit = () => {
             <VRow>
               <VCol cols="12">
                 <AppAutocomplete
-                  v-model="selectedUser"
-                  v-model:search="searchByUser"
-                  :items="usersList"
+                  v-model="selected"
+                  v-model:search="searchBy"
+                  :items="list"
                   item-title="email"
                   item-value="id"
                   label="Select user for configure"

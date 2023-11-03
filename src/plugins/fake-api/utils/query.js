@@ -7,32 +7,25 @@
 export const genQueryObjFilter = (fields, operator, values) => {
   let query = {}
 
-  function gen(field, index) {
+  function gen(field, value) {
     const query = {}
-
-    let value = null 
-
-    if (Array.isArray(values) && !Array.isArray(values[index]) && fields.length === values.length) {
-      value = values[index]
-    } else if (typeof values === 'string' && values) {
-      value = values
-    } else {
-      value = values[index]
-    }
 
     if (value) {
       if (operator == 'like') {
         value = '%' + value + '%'
       }
 
-      if (field.startsWith('r:') || field.startsWith('v:') || Array.isArray(value)) {
+      if (field.startsWith('r:') || 
+          field.startsWith('v:') || 
+          Array.isArray(value)) 
+      {
         if (Array.isArray(value)) {
           query[`${field}`] = value
         } else {
           field = field.slice(2)
           query[`${field}`] = value
         }
-      }else {
+      } else {
         if (field.startsWith('||')) {
           field = field.slice(2)
           query[`or[${field}]`] = value
@@ -43,14 +36,17 @@ export const genQueryObjFilter = (fields, operator, values) => {
         query[`${field}[operator]`] = operator
       }
     }
-
+    
     return query
   }
 
-  if (Array.isArray(fields)) {
+  if (Array.isArray(fields) && Array.isArray(values)) {
     fields.forEach((field, index) => {
-      query = { ...query, ...gen(field, index) }
+      let value = values[index]
+      query = { ...query, ...gen(field, value) }
     })
+  } else {
+    query = gen(fields, values)
   }
 
   return query

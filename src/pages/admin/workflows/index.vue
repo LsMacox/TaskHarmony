@@ -19,7 +19,7 @@ const editId = ref()
 
 // Data table options
 const createdAtRange = ref()
-const itemsPerPage = ref(10)
+const perpage = ref(10)
 const page = ref(1)
 const sortBy = ref([])
 
@@ -55,7 +55,7 @@ watch(() => searchQuery.value, val => debouncedFetchList())
 
 watch([
   page,
-  itemsPerPage,
+  perpage,
   sortBy,
 ], val => fetchList())
 
@@ -65,9 +65,9 @@ onMounted(async () => {
 
 async function fetchList () {
   await store.fetchWorkflows({
-    perpage: itemsPerPage.value,
+    perpage: perpage.value,
     page: page.value,
-    ...genQueryObjFilter(['name'], 'like', searchQuery.value),
+    ...genQueryObjFilter('name', 'like', searchQuery.value),
     ...genQueryObjFSortBy(sortBy.value),
   })
 }
@@ -111,6 +111,7 @@ const fetchDelete = async id => {
               label="Range"
               placeholder="Select date"
               :config="{ mode: 'range' }"
+              class="range-picker"
             />
           </VCol>
         </VRow>
@@ -120,7 +121,7 @@ const fetchDelete = async id => {
       <VCardText class="d-flex flex-wrap py-4 gap-4">
         <div class="me-3 d-flex gap-3">
           <AppSelect
-            :model-value="itemsPerPage"
+            :model-value="perpage"
             :items="[
               { value: 10, title: '10' },
               { value: 25, title: '25' },
@@ -128,7 +129,7 @@ const fetchDelete = async id => {
               { value: 100, title: '100' },
             ]"
             style="inline-size: 6.25rem;"
-            @update:model-value="itemsPerPage = parseInt($event, 10)"
+            @update:model-value="perpage = parseInt($event, 10)"
           />
         </div>
         <VSpacer />
@@ -157,7 +158,7 @@ const fetchDelete = async id => {
 
       <!-- SECTION datatable -->
       <VDataTableServer
-        v-model:items-per-page="itemsPerPage"
+        v-model:items-per-page="perpage"
         v-model:page="page"
         :items="workflows.data"
         :items-length="total"
@@ -179,18 +180,22 @@ const fetchDelete = async id => {
           </IconBtn>
         </template>
 
+        <template #item.created_at="{ item }">
+          {{ formatDate(item.created_at) }}
+        </template>
+
         <!-- pagination -->
         <template #bottom>
           <VDivider />
           <div class="d-flex align-center justify-sm-space-between justify-center flex-wrap gap-3 pa-5 pt-3">
             <p class="text-sm text-disabled mb-0">
-              {{ paginationMeta({ page, itemsPerPage }, total) }}
+              {{ paginationMeta({ page, perpage }, total) }}
             </p>
 
             <VPagination
               v-model="page"
-              :length="Math.ceil(total / itemsPerPage)"
-              :total-visible="$vuetify.display.xs ? 1 : Math.ceil(total / itemsPerPage)"
+              :length="Math.ceil(total / perpage)"
+              :total-visible="$vuetify.display.xs ? 1 : Math.ceil(total / perpage)"
             >
               <template #prev="slotProps">
                 <VBtn
@@ -221,3 +226,11 @@ const fetchDelete = async id => {
     </VCard>
   </section>
 </template>
+
+<style lang="scss">
+.range-picker {
+  .flat-picker-custom-style {
+    margin-block-start: 0.5rem !important;
+  }
+}
+</style>

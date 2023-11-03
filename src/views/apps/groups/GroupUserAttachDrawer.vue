@@ -45,7 +45,7 @@ const fetchUsers = async (page, save = true) => {
   const query = {
     perpage: usersPerpage.value,
     page: page ? page : 1,
-    ...genQueryObjFilter(['email', '||name'], 'like', searchByUsers.value),
+    ...genQueryObjFilter(['email', '||name'], 'like', [searchByUsers.value, searchByUsers.value]),
   }
 
   const { data: users, meta: meta } = await adminUserStore.fetchUsers(query, false)
@@ -65,7 +65,7 @@ const fetchUsers = async (page, save = true) => {
 const loadMoreUsers = async () => {
   const start = usersList.value.length
 
-  if (start <= usersTotal.value) {
+  if (start < usersTotal.value) {
     const { users } = await fetchUsers(Math.ceil(usersTotal.value / start), false)
 
     usersList.value = [...usersList.value, ...users]

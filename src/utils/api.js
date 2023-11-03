@@ -3,9 +3,12 @@ import { ofetch } from 'ofetch'
 
 function transformQuery(params) {
   let result = {}
+ 
   for (let key in params) {
     if (Array.isArray(params[key])) {
-      result[key + '[]'] = params[key]
+      params[key].forEach((param, index) => {
+        result[key + `[${index}]`] = param
+      })
     } else {
       result[key] = params[key]
     }

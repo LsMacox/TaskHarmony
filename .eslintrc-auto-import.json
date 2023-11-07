@@ -368,6 +368,10 @@
     "removeEmptyKeys": true,
     "useAdminUserStore": true,
     "GROUP_PERMISSIONS": true,
-    "useNotificationStore": true
+    "useNotificationStore": true,
+    "uniqueBy": true,
+    "WORKFLOW_STATES": true,
+    "MODERATE_STATUSES": true,
+    "getStatusFromNumber": true
   }
 }

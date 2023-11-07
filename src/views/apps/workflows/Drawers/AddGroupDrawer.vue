@@ -11,6 +11,10 @@ const props = defineProps({
     type: Array,
     required: true,
   },
+  isUser: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const emit = defineEmits([
@@ -18,10 +22,17 @@ const emit = defineEmits([
   'add',
 ])
 
-
 import { genQueryObjFilter } from '@/plugins/fake-api/utils/query'
 
-const adminGroupStore = useAdminGroupStore()
+let groupStore = useAdminGroupStore()
+
+
+// TODO: Fixme
+// We'll do it temporarily, we're short on time 
+// if (props.isUser) {
+// groupStore = useGroupStore()
+// }
+ 
 const isFormValid = ref(false)
 const refForm = ref()
 
@@ -37,14 +48,16 @@ const isMenuState = ref()
 const fetchGroups = async (page, save = true) => {
   isLoading.value = true
 
+  const includeQuery = props.groupIds[0] ? genQueryObjFilter('v:include_children_of', '=', [props.groupIds[0]]) : {}
+
   const query = {
     perpage: perpage.value,
     page: page ? page : 1,
-    ...genQueryObjFilter('include_children_of', '=', [props.groupIds[0]]),
-    ...genQueryObjFilter('exclude_children_of', '=', props.groupIds.slice(1)),
+    ...includeQuery,
+    ...genQueryObjFilter('v:exclude_children_of', '=', [...props.groupIds.slice(1)]),
   }
 
-  const { data: groups, meta: meta } = await adminGroupStore.fetchGroups(query, false)
+  const { data: groups, meta: meta } = await groupStore.fetchGroups(query, false)
 
   isLoading.value = false
   total.value = meta.total

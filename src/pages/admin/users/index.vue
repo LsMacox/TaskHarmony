@@ -46,7 +46,7 @@ async function fetchList () {
     perpage: perpage.value,
     page: page.value,
     ...genQueryObjFilter(['email', '||name'], 'like', [searchBy.value, searchBy.value]),
-    ...genQueryObjFilter('r:roles[name]', '=', selectedRole.value),
+    ...genQueryObjFilter('v:roles[name]', '=', selectedRole.value),
     ...genQueryObjFSortBy(sortBy.value),
   })
 }
@@ -164,22 +164,6 @@ const resolveUserStatusVariant = stat => {
               clear-icon="tabler-x"
             />
           </VCol> 
-          <!-- 👉 Select Status -->
-          <!--
-            <VCol
-            cols="12"
-            sm="4"
-            >
-            <AppSelect
-            v-model="selectedStatus"
-            label="Select Status"
-            placeholder="Select Status"
-            :items="status"
-            clearable
-            clear-icon="tabler-x"
-            />
-            </VCol> 
-          -->
         </VRow>
       </VCardText>
     </VCard>

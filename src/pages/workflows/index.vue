@@ -1,8 +1,8 @@
 <script setup>
 definePage({
   meta: {
-    navActiveLink: 'admin-workflows',
-    subject: 'Workflow',
+    navActiveLink: 'workflows',
+    subject: 'UserWorkflow',
     action: 'viewAny',
   },
 })
@@ -14,11 +14,11 @@ import { watch } from 'vue'
 import { VDataTableServer } from 'vuetify/labs/VDataTable'
 
 const router = useRouter()
-const store = useAdminWorkflowStore()
+const store = useWorkflowStore()
+const approveWorkflowStore = useApproveWorkflowStore()
 const searchQuery = ref('')
 const showApproveSequenceDialog = ref(false)
 const approveSequenceWorkflowId = ref()
-const selectedState = ref()
 
 // Data table options
 const createdAtRangeString = ref()
@@ -50,10 +50,6 @@ const headers = ref([
     key: 'state',
   },
   {
-    title: 'Moderate Status',
-    key: 'status',
-  },
-  {
     title: 'Created at',
     key: 'created_at',
   },
@@ -71,7 +67,6 @@ watch([
   perpage,
   sortBy,
   createdAtRangeString,
-  selectedState,
 ], val => fetchList())
 
 onMounted(async () => {
@@ -91,7 +86,8 @@ async function fetchList () {
   await store.fetchWorkflows({
     perpage: perpage.value,
     page: page.value,
-    ...genQueryObjFilter('state', '=', selectedState.value),
+
+    ...genQueryObjFilter(['state', '||state'], '=', ['in_progress', 'returned']),
     ...genQueryObjFilter(['name'], 'like', [searchQuery.value, searchQuery.value]),
     ...genQueryObjFSortBy(sortBy.value),
     ...queryRange,
@@ -105,27 +101,18 @@ const updateOptions = async options => {
   sortBy.value = options.sortBy
 }
 
-const showEdit = id => {
-  router.push(`/admin/workflows/${id}`)
-}
-
-const fetchDelete = async id => {
-  await store.deleteWorkflow(id)
-  fetchList()
-}
-
 const clickRow = (e, { item }) => {
   showApproveSequenceDialog.value = true
   approveSequenceWorkflowId.value = item.id
 }
 
-const updateStateWorkflow = async (id, state) => {
-  await store.updateWorkflow(id, { state })
+const approveWorkflow = async id => {
+  await approveWorkflowStore.approveWorkflow(id)
   fetchList()
 }
 
-const updateStatusWorkflow = async (id, status) => {
-  await store.updateWorkflow(id, { status })
+const rejectWorkflow = async id => {
+  await approveWorkflowStore.rejectWorkflow(id)
   fetchList()
 }
 </script>
@@ -137,7 +124,7 @@ const updateStatusWorkflow = async (id, status) => {
       class="mb-6"
     >
       <VCardText>
-        <VRow> 
+        <VRow class="justify-space-between"> 
           <!-- 👉 Select department radio -->
           <VCol
             cols="12"
@@ -150,19 +137,6 @@ const updateStatusWorkflow = async (id, status) => {
               :config="{ mode: 'range' }"
               class="range-picker"
               clearable
-            />
-          </VCol>
-          <VCol
-            cols="12"
-            sm="4"
-          >
-            <AppSelect
-              v-model="selectedState"
-              label="Select State"
-              placeholder="Select State"
-              :items="WORKFLOW_STATES"
-              clearable
-              clear-icon="tabler-x"
             />
           </VCol>
         </VRow>
@@ -210,22 +184,8 @@ const updateStatusWorkflow = async (id, status) => {
         @update:options="updateOptions"
         @click:row="clickRow"
       >
-        <template #item.status="{ item }">
-          {{ getStatusFromNumber(item.status, MODERATE_STATUSES) }}
-        </template>
         <!-- Actions -->
         <template #item.actions="{ item }">
-          <IconBtn @click.stop="fetchDelete(item.id)">
-            <VIcon icon="tabler-trash" />
-          </IconBtn>
-
-          <IconBtn v-if="!['approved', 'rejected'].includes(item.state)">
-            <VIcon
-              icon="tabler-edit"
-              @click.stop="showEdit(item.id)"
-            />
-          </IconBtn>
-
           <VBtn
             icon
             variant="text"
@@ -238,55 +198,18 @@ const updateStatusWorkflow = async (id, status) => {
             />
             <VMenu activator="parent">
               <VList>
-                <template v-if="item.status === MODERATE_STATUSES.approved">
-                  <VListItem
-                    v-if="['returned', 'in_progress'].includes(item.state)"
-                    @click="updateStateWorkflow(item.id, 'approved')"
-                  >
-                    <template #prepend>
-                      <VIcon icon="tabler-circle-check" />
-                    </template>
-                    <VListItemTitle>Approve</VListItemTitle>
-                  </VListItem>
-                  <VListItem
-                    v-if="['returned', 'in_progress'].includes(item.state)"
-                    @click="updateStateWorkflow(item.id, 'rejected')"
-                  >
-                    <template #prepend>
-                      <VIcon icon="tabler-ban" />
-                    </template>
-                    <VListItemTitle>Reject</VListItemTitle>
-                  </VListItem>
-                  <VListItem
-                    v-if="['rejected', 'approved'].includes(item.state)"
-                    @click="updateStateWorkflow(item.id, 'returned')"
-                  >
-                    <template #prepend>
-                      <VIcon icon="tabler-arrow-back-up" />
-                    </template>
-                    <VListItemTitle>Return</VListItemTitle>
-                  </VListItem>
-                </template>
-                <template v-else>
-                  <VListItem
-                    v-if="MODERATE_STATUSES.pending == item.status"
-                    @click="updateStatusWorkflow(item.id, 'approved')"
-                  >
-                    <template #prepend>
-                      <VIcon icon="tabler-circle-check" />
-                    </template>
-                    <VListItemTitle>Moderate approve</VListItemTitle>
-                  </VListItem>
-                  <VListItem
-                    v-if="MODERATE_STATUSES.pending == item.status"
-                    @click="updateStatusWorkflow(item.id, 'rejected')"
-                  >
-                    <template #prepend>
-                      <VIcon icon="tabler-circle-check" />
-                    </template>
-                    <VListItemTitle>Moderate reject</VListItemTitle>
-                  </VListItem>
-                </template>
+                <VListItem @click="approveWorkflow(item.id)">
+                  <template #prepend>
+                    <VIcon icon="tabler-circle-check" />
+                  </template>
+                  <VListItemTitle>Approve</VListItemTitle>
+                </VListItem>
+                <VListItem @click="rejectWorkflow(item.id)">
+                  <template #prepend>
+                    <VIcon icon="tabler-ban" />
+                  </template>
+                  <VListItemTitle>Reject</VListItemTitle>
+                </VListItem>
               </VList>
             </VMenu>
           </VBtn>
@@ -340,6 +263,7 @@ const updateStatusWorkflow = async (id, status) => {
   <ApproveSequenceDialog
     v-model="showApproveSequenceDialog"
     :workflow-id="approveSequenceWorkflowId"
+    is-user
   />
 </template>
 

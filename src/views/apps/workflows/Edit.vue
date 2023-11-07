@@ -2,10 +2,13 @@
 const props = defineProps({
   groupId: {
     type: Number,
-    required: true,
   },
   workflowId: {
     type: Number,
+  },
+  isUser: {
+    type: Boolean,
+    default: false,
   },
 })
 
@@ -21,11 +24,17 @@ import { requiredValidator } from '@/@core/utils/validators'
 import Card from '@/views/apps/workflows/DragAndDrop/Card.vue'
 import AddGroupDrawer from '@/views/apps/workflows/Drawers/AddGroupDrawer.vue'
 import AddUserDrawer from '@/views/apps/workflows/Drawers/AddUserDrawer.vue'
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 
-const store = useAdminWorkflowStore()
-const adminUserStore = useAdminUserStore()
-const adminGroupStore = useAdminGroupStore()
+let store = useAdminWorkflowStore()
+let userStore = useAdminUserStore()
+let groupStore = useAdminGroupStore()
+
+if (props.isUser) {
+  store = useWorkflowStore()
+  groupStore = useGroupStore()
+}
+
 const isAddGroupDrawer = ref(false)
 const isAddUserDrawer = ref(false)
 const isFormValid = ref(false)
@@ -53,13 +62,15 @@ const preparedApproveSequence = computed(() => {
   })
 })
 
-watch(() => props.workflowId, workflowId => {
-  store.showWorkflow(workflowId)
+onMounted(() => {
+  if (props.workflowId) {
+    store.showWorkflow(props.workflowId)
+  }
 })
 
-watch(() => workflow, workflow => {
-  name.value = workflow.name
-  approveSequence.value = workflow.approve_sequnce
+watch(() => workflow.value, workflow => {
+  name.value = workflow?.name
+  approveSequence.value = workflow?.approve_sequence
 })
 
 const moveCard = (dragIndex, hoverIndex) => {
@@ -70,8 +81,9 @@ const moveCard = (dragIndex, hoverIndex) => {
 }
 
 const addGroup = async groupIds => {
-  const { data: groups } = await adminGroupStore.fetchGroups({
-    ...genQueryObjFilter('id', '=', groupIds),
+  // TODO: Fixme
+  const { data: groups } = await useAdminGroupStore().fetchGroups({
+    ...genQueryObjFilter('v:id', '=', groupIds),
     perpage: 5000,
   }, false)
 
@@ -85,8 +97,8 @@ const addGroup = async groupIds => {
 }
 
 const addUser = async userIds => {
-  const { data: users } = await adminUserStore.fetchUsers({
-    ...genQueryObjFilter('id', '=', userIds),
+  const { data: users } = await userStore.fetchUsers({
+    ...genQueryObjFilter('v:id', '=', userIds),
     perpage: 5000,
   }, false)
 
@@ -129,11 +141,11 @@ const onSubmit = () => {
 
       emit('save', response)
 
-      await nextTick()
+      // await nextTick()
       
-      refForm.value?.reset()
-      refForm.value?.resetValidation()
-      approveSequence.value = []
+      // refForm.value?.reset()
+      // refForm.value?.resetValidation()
+      // approveSequence.value = []
     }
   })
 }
@@ -190,17 +202,17 @@ const onSubmit = () => {
               v-for="(seq, index) in approveSequence"
               :id="seq.id"
               :key="seq.id"
-              :text="seq.name"
+              :text="seq?.is_group ? seq.name : seq.email"
               :is-group="seq.is_group"
               :index="index"
               :move-card="moveCard"
               @remove="removeSeq"
             />
           </DndProvider>
-        </VCardText>
+        </VCardText>  
         <VCardActions class="justify-end">
           <VBtn type="submit">
-            Save
+            {{ !props.workflowId ? 'Create' : 'Save' }}
           </VBtn>
         </VCardActions>
       </VForm>
@@ -208,12 +220,14 @@ const onSubmit = () => {
     <AddGroupDrawer
       v-model:isDrawerOpen="isAddGroupDrawer"
       :group-ids="[props.groupId, ...approveSequenceGroupIds]"
+      :is-user="props.isUser"
       @add="addGroup"
     />
     <AddUserDrawer
       v-model:isDrawerOpen="isAddUserDrawer"
       :group-ids="[props.groupId, ...approveSequenceGroupIds]"
       :user-ids="approveSequenceUserIds"
+      :is-user="props.isUser"
       @add="addUser"
     />
   </section>

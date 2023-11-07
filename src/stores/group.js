@@ -3,6 +3,7 @@ export const useGroupStore = defineStore('group', () => {
   const groupsPermissions = ref([])
   const groups = ref([])
   const groupsTree = ref([])
+  const attachedUsers = ref([])
 
   async function fetchGroups(query)
   {
@@ -43,6 +44,19 @@ export const useGroupStore = defineStore('group', () => {
     } catch(err) {}
   }
 
+  async function fetchAttachedUsers(id)
+  {
+    try {
+      const response = await $api(`/user/groups/${id}/attached-users`, { 
+        method: 'GET', 
+      })
+
+      attachedUsers.value = response.data
+
+      return response
+    } catch(err) {}
+  }
+
   return {
     groups,
     groupsTree,
@@ -50,5 +64,7 @@ export const useGroupStore = defineStore('group', () => {
     fetchGroups,
     fetchGroupsTree,
     fetchGroupPermissions,
+    fetchAttachedUsers,
+    attachedUsers,
   }
 })

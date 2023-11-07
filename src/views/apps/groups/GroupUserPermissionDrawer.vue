@@ -11,14 +11,24 @@ const props = defineProps({
     type: Number,
     required: true,
   },
+  isUser: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const emit = defineEmits([
   'update:isDrawerOpen',
 ])
 
-const adminGroupStore = useAdminGroupStore()
-const adminUserGroupStore = useAdminUserGroupStore()
+let groupStore = useAdminGroupStore()
+let userGroupStore = useAdminUserGroupStore()
+
+if (props.isUser) {
+  groupStore = useGroupStore()
+  userGroupStore = useUserGroupStore()
+}
+
 const isFormValid = ref(false)
 const refForm = ref()
 
@@ -30,18 +40,20 @@ const searchBy = ref('')
 const isLoading = ref(false)
 const isMenuState = ref()
 
-watch(() => selected.value, async user => {
-  const response = await adminUserGroupStore.fetchGroupPermissions(user, props.groupId)
+watch(() => selected.value, async userId => {
+  if (userId) {
+    const response = await userGroupStore.fetchGroupPermissions(userId, props.groupId)
 
-  if (response?.permissions) {
-    selectedPermission.value = response.permissions
+    if (response?.permissions) {
+      selectedPermission.value = response.permissions
+    }
   }
 })
 
 const fetchAttachedUsers = async (save = true) => {
   isLoading.value = true
 
-  const { data: users } = await adminGroupStore.fetchAttachedUsers(props.groupId, false)
+  const { data: users } = await groupStore.fetchAttachedUsers(props.groupId, false)
 
   isLoading.value = false
 
@@ -89,7 +101,7 @@ const closeNavigationDrawer = () => {
 const onSubmit = () => {
   refForm.value?.validate().then(async ({ valid }) => {
     if (valid) {
-      await adminUserGroupStore.updateGroupPermissions(selected.value, props.groupId, {
+      await userGroupStore.updateGroupPermissions(selected.value, props.groupId, {
         permissions: selectedPermission.value,
       })
       await nextTick()
@@ -150,7 +162,6 @@ const onSubmit = () => {
                   clearable
                   clear-icon="tabler-x"
                   multiple
-                  :rules="[requiredValidator]"
                 />
               </VCol>
 
@@ -160,7 +171,7 @@ const onSubmit = () => {
                   type="submit"
                   class="me-3"
                 >
-                  Submit
+                  Save
                 </VBtn>
                 <VBtn
                   type="reset"

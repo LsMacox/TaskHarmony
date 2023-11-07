@@ -47,9 +47,12 @@ declare module 'vue-router/auto/routes' {
     'admin-workflows-id': RouteRecordInfo<'admin-workflows-id', '/admin/workflows/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     'archive': RouteRecordInfo<'archive', '/archive', Record<never, never>, Record<never, never>>,
     'groups': RouteRecordInfo<'groups', '/groups', Record<never, never>, Record<never, never>>,
+    'groups-group-id-workflows-add': RouteRecordInfo<'groups-group-id-workflows-add', '/groups/:groupId/workflows/add', { groupId: ParamValue<true> }, { groupId: ParamValue<false> }>,
     'login': RouteRecordInfo<'login', '/login', Record<never, never>, Record<never, never>>,
     'not-authorized': RouteRecordInfo<'not-authorized', '/not-authorized', Record<never, never>, Record<never, never>>,
     'register': RouteRecordInfo<'register', '/register', Record<never, never>, Record<never, never>>,
+    'workflows': RouteRecordInfo<'workflows', '/workflows', Record<never, never>, Record<never, never>>,
+    'workflows-id': RouteRecordInfo<'workflows-id', '/workflows/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
   }
 }
 

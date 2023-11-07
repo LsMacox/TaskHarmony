@@ -28,14 +28,14 @@ const refForm = ref()
 
 const name = ref(store.group?.name ?? '')
 const description = ref(store.group?.description ?? '')
-const selectedParent = ref({})
+const selected = ref({})
 
-const groupsList = ref([])
-const parentListPerPage = ref(15)
-const parentListTotal = ref(0)
-const searchByParentList = ref('')
-const isLoadingParentList = ref(false)
-const isParentListState = ref()
+const list = ref([])
+const perpage = ref(15)
+const total = ref(0)
+const searchBy = ref('')
+const isLoading = ref(false)
+const isMenuState = ref()
 
 
 watch(() => store.group, item => {
@@ -43,29 +43,26 @@ watch(() => store.group, item => {
     name.value = item.name
     description.value = item.description
 
-    selectedParent.value = item.parent_id ? {
-      id: item.parent_id,
-      name: item.parent_name,
-    } : null
+    selected.value = item.parent_id
   }
 })
 
-const fetchParentList = async (page, save = true) => {
-  isLoadingParentList.value = true
+const fetchList = async (page, save = true) => {
+  isLoading.value = true
 
   const query = {
-    perpage: parentListPerPage.value,
+    perpage: perpage.value,
     page: page ? page : 1,
-    ...genQueryObjFilter(['name', '||description'], 'like', [searchByParentList.value, searchByParentList.value]),
+    ...genQueryObjFilter(['name', '||description'], 'like', [searchBy.value, searchBy.value]),
   }
 
   const { data: groups, meta: meta } = await store.fetchGroups(query, false)
 
-  isLoadingParentList.value = false
-  parentListTotal.value = meta.total
+  isLoading.value = false
+  total.value = meta.total
 
   if (save) {
-    groupsList.value = groups
+    list.value = groups
   }
 
   return {
@@ -73,33 +70,33 @@ const fetchParentList = async (page, save = true) => {
   }
 }
 
-const loadMoreParentList = async () => {
-  const start = groupsList.value.length
-  const end = start + parentListPerPage.value
+const loadMore = async () => {
+  const start = list.value.length
+  const end = start + perpage.value
 
-  if (end <= parentListTotal.value) {
-    const { groups } = await fetchParentList(Math.ceil(parentListTotal.value / start), false)
+  if (end < total.value) {
+    const { groups } = await fetchList(Math.ceil(total.value / start), false)
 
-    groupsList.value = [...groupsList.value, ...groups]
+    list.value = [...list.value, ...groups]
   }
 }
 
-const searchFetchParentList = async () => {
-  if (isParentListState.value) {
-    groupsList.value = []
+const fetchSearch = async () => {
+  if (isMenuState.value) {
+    list.value = []
     await nextTick()
-    await fetchParentList()
+    await fetchList()
   }
 }
 
-const debouncedSearchFetchParentList = useDebounceFn(searchFetchParentList, 300)
+const debouncedFetchSearch = useDebounceFn(fetchSearch, 300)
 
-watch(() => searchByParentList.value, () => debouncedSearchFetchParentList())
+watch(() => searchBy.value, () => debouncedFetchSearch())
 
 watch(() => props.isDrawerOpen, async val => {
   if (val) {
-    groupsList.value = []
-    await fetchParentList()
+    list.value = []
+    await fetchList()
     if (props.editId) {
       store.showGroup(props.editId)
     } else {
@@ -132,8 +129,8 @@ const onSubmit = () => {
         description: description.value,
         is_department: props.isDepartment,
         parent_id: props.editId 
-          ? !selectedParent.value ? 'none' : selectedParent.value 
-          : selectedParent.value,
+          ? !selected.value ? 'none' : selected.value 
+          : selected.value,
       })
       emit('update:isDrawerOpen', false)
       nextTick(() => {
@@ -186,20 +183,20 @@ const onSubmit = () => {
                 cols="12"
               >
                 <AppAutocomplete
-                  v-model="selectedParent"
-                  v-model:search="searchByParentList"
-                  :items="groupsList"
+                  v-model="selected"
+                  v-model:search="searchBy"
+                  :items="list"
                   item-title="name"
                   item-value="id"
                   label="Select Parent"
                   placeholder="Select Parent"
                   clearable
                   clear-icon="tabler-x"
-                  @update:menu="(state) => isParentListState = state"
+                  @update:menu="(state) => isMenuState = state"
                 >
                   <template #append-item>
                     <div
-                      v-if="isLoadingParentList"
+                      v-if="isLoading"
                       class="text-center my-2"
                     >
                       Loading...
@@ -207,7 +204,7 @@ const onSubmit = () => {
                     <div
                       v-else
                       class="text-center my-2 cursor-pointer"
-                      @click="loadMoreParentList"
+                      @click="loadMore"
                     >
                       Load more
                     </div>
@@ -231,7 +228,7 @@ const onSubmit = () => {
                   type="submit"
                   class="me-3"
                 >
-                  Submit
+                  Save
                 </VBtn>
                 <VBtn
                   type="reset"

@@ -9,13 +9,22 @@ export const useNotificationStore = defineStore('notification', () => {
       query,
     })
 
-    users.value = response
+    notifications.value = response.data
 
     return response
+  }
+
+  async function mark(ids)
+  {
+    return await $api(`/user/notifications/mark`, { 
+      method: 'PUT', 
+      body: { ids },
+    })
   }
 
   return {
     notifications,
     fetchNotifications,
+    mark,
   }
 })

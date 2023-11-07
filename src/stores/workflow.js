@@ -2,6 +2,7 @@ import { useToast } from "vue-toast-notification"
 
 export const useWorkflowStore = defineStore('workflow', () => {
   const workflows = ref([])
+  const workflow = ref({})
   const approvalsCount = ref(0)
 
   const toast = useToast()
@@ -29,6 +30,19 @@ export const useWorkflowStore = defineStore('workflow', () => {
       })
 
       toast.success('Success!')
+    } catch(err) {}
+  }
+
+  async function showWorkflow(workflowId)
+  {
+    try {
+      const response = await $api(`/user/workflows/${workflowId}`, { 
+        method: 'GET', 
+      })
+
+      workflow.value = response.data
+
+      return response
     } catch(err) {}
   }
 
@@ -68,10 +82,13 @@ export const useWorkflowStore = defineStore('workflow', () => {
 
   return {
     workflows,
+    workflow,
     fetchWorkflows,
     storeWorkflow,
+    showWorkflow,
     updateWorkflow,
     deleteWorklow,
     getApprovalsCount,
+    approvalsCount,
   }
 })

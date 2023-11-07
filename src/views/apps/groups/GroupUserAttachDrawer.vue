@@ -11,6 +11,10 @@ const props = defineProps({
     type: Number,
     required: true,
   },
+  isUser: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const emit = defineEmits([
@@ -20,8 +24,13 @@ const emit = defineEmits([
 
 import { genQueryObjFilter } from '@/plugins/fake-api/utils/query'
 
-const adminGroupStore = useAdminGroupStore()
+let groupStore = useAdminGroupStore()
 const adminUserStore = useAdminUserStore()
+
+if (props.isUser) {
+  groupStore = useGroupStore()
+}
+
 const isFormValid = ref(false)
 const refForm = ref()
 
@@ -35,7 +44,7 @@ const isUsersLoading = ref(false)
 const isMenuState = ref()
 
 
-watch(() => adminGroupStore.attachedUsers, async users => {
+watch(() => groupStore.attachedUsers, async users => {
   selectedUsers.value = users
 })
 
@@ -88,7 +97,7 @@ watch(() => props.isDrawerOpen, async val => {
   if (val) {
     usersList.value = []
     await fetchUsers()
-    await adminGroupStore.fetchAttachedUsers(props.groupId)
+    await groupStore.fetchAttachedUsers(props.groupId)
   }
 })
 
@@ -183,7 +192,7 @@ const onSubmit = () => {
                   type="submit"
                   class="me-3"
                 >
-                  Attach
+                  Save
                 </VBtn>
                 <VBtn
                   type="reset"

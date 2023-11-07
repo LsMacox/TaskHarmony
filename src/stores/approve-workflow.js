@@ -8,7 +8,7 @@ export const useApproveWorkflowStore = defineStore('approve-workflow', () => {
   {
     try {
       await $api(`user/user-workflow-approvals/${workflowId}/approve`, { 
-        method: 'GET', 
+        method: 'POST', 
       })
 
       toast.success('Workflow approved!')
@@ -19,7 +19,7 @@ export const useApproveWorkflowStore = defineStore('approve-workflow', () => {
   {
     try {
       await $api(`user/user-workflow-approvals/${workflowId}/reject`, { 
-        method: 'GET', 
+        method: 'POST', 
       })
 
       toast.success('Workflow rejected!')

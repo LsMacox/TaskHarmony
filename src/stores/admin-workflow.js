@@ -29,7 +29,7 @@ export const useAdminWorkflowStore = defineStore('admin-workflow', () => {
         method: 'GET', 
       })
 
-      workflow.value = response
+      workflow.value = response.data
 
       return response
     } catch(err) {}
@@ -73,7 +73,7 @@ export const useAdminWorkflowStore = defineStore('admin-workflow', () => {
     } catch(err) {}
   }
 
-  async function deleteWorklow(id)
+  async function deleteWorkflow(id)
   {
     try {
       await $api(`/admin/workflows/${id}`, { 
@@ -102,8 +102,9 @@ export const useAdminWorkflowStore = defineStore('admin-workflow', () => {
     fetchWorkflowsTree,
     storeWorkflow,
     updateWorkflow,
-    deleteWorklow,
+    deleteWorkflow,
     getApprovalsCount,
+    approvalsCount,
     showWorkflow,
     workflow,
   }

@@ -13,6 +13,10 @@ const props = defineProps({
   userIds: {
     type: Array,
   },
+  isUser: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const emit = defineEmits([
@@ -22,7 +26,12 @@ const emit = defineEmits([
 
 import { genQueryObjFilter } from '@/plugins/fake-api/utils/query'
 
-const adminUserStore = useAdminUserStore()
+let userStore = useAdminUserStore()
+
+if(props.isUser) {
+  userStore = useUserStore() 
+}
+
 const isFormValid = ref(false)
 const refForm = ref()
 
@@ -42,11 +51,11 @@ const fetchUsers = async (page, save = true) => {
     perpage: perpage.value,
     page: page ? page : 1,
     ...genQueryObjFilter(['email', '||name'], 'like', searchBy.value),
-    ...genQueryObjFilter('exclude_from_groups', '=', props.groupIds),
-    ...genQueryObjFilter('id', '!=', props.userIds),
+    ...genQueryObjFilter('v:exclude_from_groups', '=', props.groupIds),
+    ...genQueryObjFilter('v:id', '!=', props.userIds),
   }
 
-  const { data: users, meta: meta } = await adminUserStore.fetchUsers(query, false)
+  const { data: users, meta: meta } = await userStore.fetchUsers(query, false)
 
   isLoading.value = false
   total.value = meta.total

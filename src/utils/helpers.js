@@ -16,3 +16,28 @@ export function removeEmptyKeys(obj) {
       }),
   )
 }
+
+export function uniqueBy(array, key) {
+  const seen = new Map()
+
+  return array.filter(item => {
+    const id = item[key]
+    const isDuplicate = seen.has(id)
+
+    if (!isDuplicate) {
+      seen.set(id, true)
+    }
+
+    return !isDuplicate
+  })
+}
+
+export function getStatusFromNumber(number, statuses) {
+  for (const status in statuses) {
+    if (statuses[status] === number) {
+      return status
+    }
+  }
+  
+  return null
+}

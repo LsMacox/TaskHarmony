@@ -39,8 +39,6 @@ const credentials = ref({
   password: '',
 })
 
-const rememberMe = ref(false)
-
 const login = async () => {
   try {
     isLoading.value = true
@@ -159,7 +157,6 @@ const onSubmit = () => {
                   :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
                   @click:append-inner="isPasswordVisible = !isPasswordVisible"
                 />
-
 
                 <VBtn
                   block

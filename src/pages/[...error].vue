@@ -24,7 +24,7 @@ definePage({
     />
 
     <VBtn
-      to="/"
+      :to="{ name: 'workflows' }"
       class="mb-12"
     >
       Back to Home

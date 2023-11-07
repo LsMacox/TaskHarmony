@@ -13,5 +13,18 @@ export const ROLES = [
 
 export const GROUP_PERMISSIONS = [
   'create',
-  'view',
 ]
+
+export const WORKFLOW_STATES = [
+  'in_progress',
+  'returned',
+  'approved',
+  'rejected',
+]
+
+export const MODERATE_STATUSES = {
+  'pending': 0,
+  'approved': 1,
+  'rejected': 2,
+  'postponed': 3,
+}

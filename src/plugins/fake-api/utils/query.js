@@ -7,33 +7,52 @@
 export const genQueryObjFilter = (fields, operator, values) => {
   let query = {}
 
+  function slicedField(field) {
+    if (field.startsWith('||') || field.startsWith('v:')) {
+      return field.slice(2)
+    }
+
+    return field
+  }
+
+  function prepareField(field) {
+    if (field.startsWith('||')) {
+      return `or[${slicedField(field)}]`
+    } else if (field.startsWith('v:')) {
+      return `${slicedField(field)}`
+    } else {
+      return `${slicedField(field)}[value]`
+    }
+  }
+
+  function prepareOperator(field, value) {
+    if (field.startsWith('v:') && !Array.isArray(value)) {
+      return null
+    } else if (field.startsWith('||')) {
+      return `or[${slicedField(field)}][operator]`
+    } else {
+      return `${slicedField(field)}[operator]`
+    }
+  }
+
   function gen(field, value) {
     const query = {}
 
-    if (value) {
-      if (operator == 'like') {
+    if (value && value.length || typeof value === 'number') {
+      if (operator === 'like') {
         value = '%' + value + '%'
       }
 
-      if (field.startsWith('r:') || 
-          field.startsWith('v:') || 
-          Array.isArray(value)) 
-      {
-        if (Array.isArray(value)) {
-          query[`${field}`] = value
-        } else {
-          field = field.slice(2)
-          query[`${field}`] = value
-        }
-      } else {
-        if (field.startsWith('||')) {
-          field = field.slice(2)
-          query[`or[${field}]`] = value
-        } else {
-          query[`${field}[value]`] = value
-        }
+      let preparedField = prepareField(field)
+      let preparedOperator = prepareOperator(field, value)
 
-        query[`${field}[operator]`] = operator
+      if (preparedField.startsWith('or') && !Array.isArray(value)) {
+        preparedField = preparedField + '[value]'
+      }
+
+      query[preparedField] = value
+      if (preparedOperator) {
+        query[preparedOperator] = operator
       }
     }
     
@@ -67,4 +86,10 @@ export const genQueryObjFSortBy = sortBy => {
   return query
 }
 
-
+export function ensureArray(value) {
+  if (!Array.isArray(value)) {
+    return [value]
+  }
+  
+  return value
+}

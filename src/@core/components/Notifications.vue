@@ -19,34 +19,18 @@ const props = defineProps({
 })
 
 const emit = defineEmits([
-  'read',
-  'unread',
   'remove',
   'click:notification',
+  'open',
 ])
-
-const isAllMarkRead = computed(() => props.notifications.some(item => item.isSeen === false))
-
-const markAllReadOrUnread = () => {
-  const allNotificationsIds = props.notifications.map(item => item.id)
-  if (!isAllMarkRead.value)
-    emit('unread', allNotificationsIds)
-  else
-    emit('read', allNotificationsIds)
-}
-
-const totalUnseenNotifications = computed(() => {
-  return props.notifications.filter(item => item.isSeen === false).length
-})
 </script>
 
 <template>
   <IconBtn id="notification-btn">
     <VBadge
       v-bind="props.badgeProps"
-      :model-value="props.notifications.some(n => !n.isSeen)"
       color="error"
-      :content="totalUnseenNotifications"
+      :model-value="notifications.length"
       class="notification-badge"
     >
       <VIcon
@@ -61,6 +45,7 @@ const totalUnseenNotifications = computed(() => {
       :location="props.location"
       offset="14px"
       :close-on-content-click="false"
+      @update:model-value="(val) => $emit('open', val)"
     >
       <VCard class="d-flex flex-column">
         <!-- 👉 Header -->
@@ -68,22 +53,6 @@ const totalUnseenNotifications = computed(() => {
           <VCardTitle class="text-lg">
             Notifications
           </VCardTitle>
-
-          <template #append>
-            <IconBtn
-              v-show="props.notifications.length"
-              @click="markAllReadOrUnread"
-            >
-              <VIcon :icon="!isAllMarkRead ? 'tabler-mail' : 'tabler-mail-opened' " />
-
-              <VTooltip
-                activator="parent"
-                location="start"
-              >
-                {{ !isAllMarkRead ? 'Mark all as unread' : 'Mark all as read' }}
-              </VTooltip>
-            </IconBtn>
-          </template>
         </VCardItem>
 
         <VDivider />
@@ -96,7 +65,7 @@ const totalUnseenNotifications = computed(() => {
           <VList class="notification-list rounded-0 py-0">
             <template
               v-for="(notification, index) in props.notifications"
-              :key="notification.title"
+              :key="notification.id"
             >
               <VDivider v-if="index > 0" />
               <VListItem
@@ -108,36 +77,14 @@ const totalUnseenNotifications = computed(() => {
               >
                 <!-- Slot: Prepend -->
                 <!-- Handles Avatar: Image, Icon, Text -->
-                <template #prepend>
-                  <VListItemAction start>
-                    <VAvatar
-                      size="40"
-                      :color="notification.color && notification.icon ? notification.color : undefined"
-                      :image="notification.img || undefined"
-                      :icon="notification.icon || undefined"
-                      :variant="notification.img ? undefined : 'tonal' "
-                    >
-                      <span v-if="notification.text">{{ avatarText(notification.text) }}</span>
-                    </VAvatar>
-                  </VListItemAction>
-                </template>
-
                 <VListItemTitle class="font-weight-medium">
                   {{ notification.title }}
                 </VListItemTitle>
-                <VListItemSubtitle>{{ notification.subtitle }}</VListItemSubtitle>
-                <span class="text-xs text-disabled">{{ notification.time }}</span>
+                <VListItemSubtitle>{{ notification.description }}</VListItemSubtitle>
 
                 <!-- Slot: Append -->
                 <template #append>
                   <div class="d-flex flex-column align-center gap-4">
-                    <VBadge
-                      dot
-                      :color="!notification.isSeen ? 'primary' : '#a8aaae'"
-                      :class="`${notification.isSeen ? 'visible-in-hover' : ''} ms-1`"
-                      @click.stop="$emit(notification.isSeen ? 'unread' : 'read', [notification.id])"
-                    />
-
                     <div style="block-size: 28px; inline-size: 28px;">
                       <IconBtn
                         size="small"
@@ -168,14 +115,16 @@ const totalUnseenNotifications = computed(() => {
         <VDivider />
 
         <!-- 👉 Footer -->
-        <VCardActions
+        <!--
+          <VCardActions
           v-show="props.notifications.length"
           class="notification-footer"
-        >
+          >
           <VBtn block>
-            View All Notifications
+          View All Notifications
           </VBtn>
-        </VCardActions>
+          </VCardActions> 
+        -->
       </VCard>
     </VMenu>
   </IconBtn>

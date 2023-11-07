@@ -1,8 +1,8 @@
 <script setup>
+import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant'
 import pages401 from '@images/pages/401.png'
 import miscMaskDark from '@images/pages/misc-mask-dark.png'
 import miscMaskLight from '@images/pages/misc-mask-light.png'
-import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant'
 
 definePage({
   alias: '/pages/misc/not-authorized',
@@ -26,7 +26,7 @@ const authThemeMask = useGenerateImageVariant(miscMaskLight, miscMaskDark)
 
     <VBtn
       class="mt-2 mb-10"
-      to="/"
+      :to="{ name: 'workflows' }"
     >
       Back Home
     </VBtn>
